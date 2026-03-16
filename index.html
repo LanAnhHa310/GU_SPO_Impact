@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gonzaga & Spokane — 25 Years of Parallel Growth</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gu-navy:   #002868;
+      --gu-red:    #CE1126;
+      --sp-teal:   #0d6b6e;
+      --sp-light:  #e6f4f4;
+      --gu-light:  #e8ecf5;
+      --bg:        #f5f5f0;
+      --text:      #1a1a1a;
+      --muted:     #666;
+      --era1:      #7b5ea7;
+      --era2:      #c96a00;
+      --era3:      #1a7a4a;
+    }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, var(--gu-navy) 0%, #001a4d 100%);
+      color: white;
+      padding: 2.5rem 2rem 2rem;
+      text-align: center;
+    }
+    header h1 {
+      font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: .4rem;
+    }
+    header h1 span { color: #f0c040; }
+    header p {
+      font-size: .95rem;
+      color: rgba(255,255,255,.7);
+      font-style: italic;
+    }
+
+    /* stat pills */
+    .stats {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: .75rem;
+      margin-top: 1.5rem;
+    }
+    .stat {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 999px;
+      padding: .35rem 1rem;
+      font-size: .82rem;
+      color: rgba(255,255,255,.9);
+    }
+    .stat strong { color: #f0c040; }
+
+    /* ── LEGEND ── */
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: .8rem 1rem;
+      background: white;
+      border-bottom: 1px solid #ddd;
+      font-size: .85rem;
+    }
+    .leg { display: flex; align-items: center; gap: .4rem; }
+    .leg-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── TIMELINE SCROLL AREA ── */
+    .timeline-wrapper {
+      background: white;
+      padding: 1.5rem 2rem 1rem;
+      overflow-x: auto;
+      border-bottom: 2px solid #e0e0e0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+    }
+
+    /* era row */
+    .era-row {
+      display: flex;
+      align-items: flex-end;
+      min-width: max-content;
+      margin-bottom: .5rem;
+    }
+    .era-label {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: white;
+      padding: .2rem .7rem;
+      border-radius: 4px 4px 0 0;
+      white-space: nowrap;
+    }
+
+    /* main timeline track */
+    .timeline-track {
+      display: flex;
+      align-items: center;
+      position: relative;
+      min-width: max-content;
+      padding: .5rem 0;
+    }
+    .track-line {
+      position: absolute;
+      top: 50%; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(to right, var(--era1), var(--era2), var(--era3));
+      transform: translateY(-50%);
+      border-radius: 2px;
+      z-index: 0;
+    }
+
+    /* year node */
+    .year-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+      width: 54px;
+      cursor: pointer;
+      transition: transform .15s;
+      user-select: none;
+    }
+    .year-node:hover { transform: translateY(-2px); }
+
+    .node-dot {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      border: 3px solid white;
+      box-shadow: 0 0 0 2px #aaa;
+      background: #aaa;
+      transition: all .2s;
+      margin-bottom: .3rem;
+    }
+    .year-node.has-gu    .node-dot { background: var(--gu-navy); box-shadow: 0 0 0 2px var(--gu-navy); }
+    .year-node.has-sp    .node-dot { background: var(--sp-teal); box-shadow: 0 0 0 2px var(--sp-teal); }
+    .year-node.has-both  .node-dot {
+      background: linear-gradient(135deg, var(--gu-navy) 50%, var(--sp-teal) 50%);
+      box-shadow: 0 0 0 2px #555;
+      width: 20px; height: 20px;
+    }
+    .year-node.active .node-dot {
+      transform: scale(1.5);
+      box-shadow: 0 0 0 3px #f0c040;
+    }
+
+    .node-year {
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: .02em;
+      transition: color .2s;
+    }
+    .year-node.active .node-year { color: var(--text); }
+    .year-node.has-both .node-year { color: var(--text); }
+
+    /* ── DETAIL PANEL ── */
+    main { padding: 2rem 1.5rem 4rem; max-width: 1100px; margin: 0 auto; }
+
+    .year-display {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .year-display .big-year {
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-weight: 900;
+      color: var(--gu-navy);
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+    .year-display .era-tag {
+      display: inline-block;
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .25rem .8rem;
+      border-radius: 999px;
+      margin-top: .4rem;
+      color: white;
+    }
+
+    /* split columns */
+    .columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 700px) { .columns { grid-template-columns: 1fr; } }
+
+    .col {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(0,0,0,.07);
+      animation: slideIn .3s ease;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .col-header {
+      padding: 1rem 1.25rem;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .col-header .icon { font-size: 1.4rem; }
+    .col-header h2 { font-size: 1rem; font-weight: 700; }
+    .col-header p  { font-size: .78rem; opacity: .8; }
+    .col.gu-col .col-header { background: linear-gradient(135deg, var(--gu-navy), #1a3d7a); }
+    .col.sp-col .col-header { background: linear-gradient(135deg, var(--sp-teal), #0a4a4d); }
+
+    .col-body { padding: 1.25rem; }
+
+    .event-card {
+      border-left: 3px solid transparent;
+      padding: .6rem .75rem .6rem .85rem;
+      margin-bottom: .85rem;
+      border-radius: 0 6px 6px 0;
+      background: var(--gu-light);
+      transition: background .2s;
+    }
+    .sp-col .event-card { background: var(--sp-light); }
+    .gu-col .event-card { border-left-color: var(--gu-red); }
+    .sp-col .event-card { border-left-color: var(--sp-teal); }
+
+    .event-card .ev-title {
+      font-weight: 700;
+      font-size: .9rem;
+      margin-bottom: .15rem;
+      color: var(--text);
+    }
+    .event-card .ev-sub {
+      font-size: .82rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .event-card .ev-tag {
+      display: inline-block;
+      font-size: .68rem;
+      font-weight: 700;
+      padding: .1rem .45rem;
+      border-radius: 999px;
+      margin-top: .3rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .tag-invest  { background: #fff3cd; color: #664d00; }
+    .tag-enroll  { background: #d1ecf1; color: #0c5460; }
+    .tag-sport   { background: #f8d7da; color: #721c24; }
+    .tag-academic{ background: #d4edda; color: #155724; }
+    .tag-city    { background: #e2d9f3; color: #3d1a6e; }
+    .tag-infra   { background: #ffe5d0; color: #7a3900; }
+    .tag-context { background: #e9ecef; color: #495057; }
+    .tag-partner { background: #cce5ff; color: #004085; }
+
+    .empty-state {
+      color: var(--muted);
+      font-style: italic;
+      font-size: .88rem;
+      text-align: center;
+      padding: 1.5rem 0;
+    }
+
+    /* nav arrows */
+    .nav-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .nav-btn {
+      background: var(--gu-navy);
+      color: white;
+      border: none;
+      border-radius: 999px;
+      padding: .5rem 1.4rem;
+      cursor: pointer;
+      font-size: .9rem;
+      transition: background .2s;
+    }
+    .nav-btn:hover { background: #1a3d7a; }
+    .nav-btn:disabled { background: #ccc; cursor: default; }
+    .nav-year { font-size: 1rem; font-weight: 700; color: var(--muted); min-width: 3rem; text-align: center; }
+
+    /* growth bar */
+    .growth-bar-section {
+      margin-top: 2.5rem;
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 16px rgba(0,0,0,.07);
+    }
+    .growth-bar-section h3 {
+      font-size: .95rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+    .metric-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: .9rem;
+      gap: .75rem;
+    }
+    .metric-label { width: 140px; font-size: .82rem; color: var(--muted); flex-shrink: 0; }
+    .bar-wrap { flex: 1; background: #f0f0f0; border-radius: 999px; height: 10px; overflow: hidden; }
+    .bar-fill  { height: 100%; border-radius: 999px; transition: width .6s ease; }
+    .metric-value { width: 80px; font-size: .82rem; font-weight: 700; text-align: right; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <h1>Gonzaga & <span>Spokane</span> — 25 Years of Parallel Growth</h1>
+  <p>How a university's rise became a city's renaissance (2000–2024)</p>
+  <div class="stats">
+    <div class="stat">Enrollment <strong>4,507 → 7,470</strong></div>
+    <div class="stat">Grad success rate <strong>95%+</strong></div>
+    <div class="stat">Spokane #1 destination <strong>317 grads (2023)</strong></div>
+    <div class="stat">Avg salary <strong>$48k → $71.8k</strong></div>
+    <div class="stat">Campus built <strong>$200M+</strong></div>
+  </div>
+</header>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="leg"><div class="leg-dot" style="background:var(--gu-navy)"></div> Gonzaga University</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--sp-teal)"></div> City of Spokane</div>
+  <div class="leg"><div class="leg-dot" style="background:linear-gradient(135deg,var(--gu-navy) 50%,var(--sp-teal) 50%)"></div> Both</div>
+</div>
+
+<!-- STICKY TIMELINE -->
+<div class="timeline-wrapper">
+  <div class="era-row" id="eraRow"></div>
+  <div class="timeline-track">
+    <div class="track-line"></div>
+    <div id="timelineNodes" style="display:flex; gap:0; position:relative; z-index:1;"></div>
+  </div>
+</div>
+
+<!-- MAIN DETAIL -->
+<main>
+  <div class="year-display">
+    <div class="big-year" id="bigYear">2000</div>
+    <div class="era-tag" id="eraTag"></div>
+  </div>
+
+  <div class="columns">
+    <div class="col gu-col" id="guCol">
+      <div class="col-header">
+        <span class="icon">🎓</span>
+        <div><h2>Gonzaga University</h2><p id="guSubhead">Campus events & milestones</p></div>
+      </div>
+      <div class="col-body" id="guBody"></div>
+    </div>
+    <div class="col sp-col" id="spCol">
+      <div class="col-header">
+        <span class="icon">🏙️</span>
+        <div><h2>City of Spokane</h2><p id="spSubhead">Urban development & economy</p></div>
+      </div>
+      <div class="col-body" id="spBody"></div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav-bar">
+    <button class="nav-btn" id="prevBtn" onclick="navigate(-1)">← Prev</button>
+    <span class="nav-year" id="navYear"></span>
+    <button class="nav-btn" id="nextBtn" onclick="navigate(1)">Next →</button>
+  </div>
+
+  <!-- GROWTH BARS -->
+  <div class="growth-bar-section">
+    <h3>Growth Indicators Over Time</h3>
+    <div class="metric-row">
+      <div class="metric-label">GU Enrollment</div>
+      <div class="bar-wrap"><div class="bar-fill" id="barEnroll" style="background:var(--gu-navy);width:0%"></div></div>
+      <div class="metric-value" id="valEnroll">—</div>
+    </div>
+    <div class="metric-row">
+      <div class="metric-label">Grad Salary</div>
+      <div class="bar-wrap"><div class="bar-fill" id="barSalary" style="background:var(--gu-red);width:0%"></div></div>
+      <div class="metric-value" id="valSalary">—</div>
+    </div>
+    <div class="metric-row">
+      <div class="metric-label">Success Rate</div>
+      <div class="bar-wrap"><div class="bar-fill" id="barSuccess" style="background:var(--sp-teal);width:0%"></div></div>
+      <div class="metric-value" id="valSuccess">—</div>
+    </div>
+    <div class="metric-row">
+      <div class="metric-label">GU Campus Invest.</div>
+      <div class="bar-wrap"><div class="bar-fill" id="barInvest" style="background:var(--era2);width:0%"></div></div>
+      <div class="metric-value" id="valInvest">—</div>
+    </div>
+  </div>
+</main>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const ERAS = [
+  { label: "Pre-Story", years: [1999],               color: "#666"         },
+  { label: "Foundation",years: [2000,2001,2002,2003,2004], color: "#7b5ea7" },
+  { label: "Buildout",  years: [2005,2006,2007,2008,2009,2010,2011,2012], color: "#c96a00" },
+  { label: "Parallel Growth", years: [2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024], color: "#1a7a4a" },
+];
+
+// Metrics for growth bars (enrollment, salary, successRate%, campusInvestCumulative $M)
+const METRICS = {
+  1999: { enrollment: 4507,  salary: null,  success: null,  invest: 0   },
+  2000: { enrollment: 4800,  salary: null,  success: null,  invest: 17.5 },
+  2001: { enrollment: 5300,  salary: null,  success: null,  invest: 17.5 },
+  2002: { enrollment: 5600,  salary: null,  success: null,  invest: 17.5 },
+  2003: { enrollment: 6000,  salary: null,  success: null,  invest: 17.5 },
+  2004: { enrollment: 6200,  salary: null,  success: null,  invest: 40.5 },
+  2005: { enrollment: 6500,  salary: null,  success: null,  invest: 40.5 },
+  2006: { enrollment: 6800,  salary: null,  success: null,  invest: 40.5 },
+  2007: { enrollment: 7100,  salary: null,  success: null,  invest: 47.5 },
+  2008: { enrollment: 7319,  salary: null,  success: null,  invest: 47.5 },
+  2009: { enrollment: 7500,  salary: null,  success: null,  invest: 63.5 },
+  2010: { enrollment: 7600,  salary: null,  success: null,  invest: 63.5 },
+  2011: { enrollment: 7700,  salary: null,  success: null,  invest: 63.5 },
+  2012: { enrollment: 7800,  salary: null,  success: null,  invest: 78.5 },
+  2013: { enrollment: 7800,  salary: null,  success: null,  invest: 78.5 },
+  2014: { enrollment: 7800,  salary: null,  success: null,  invest: 78.5 },
+  2015: { enrollment: 7800,  salary: null,  success: null,  invest: 138.5},
+  2016: { enrollment: 7800,  salary: 48119, success: 94,    invest: 138.5},
+  2017: { enrollment: 7800,  salary: 59710, success: 95,    invest: 138.5},
+  2018: { enrollment: 7800,  salary: 61520, success: 95,    invest: 138.5},
+  2019: { enrollment: 7800,  salary: 63853, success: 95.5,  invest: 138.5},
+  2020: { enrollment: 7600,  salary: 66166, success: 89,    invest: 138.5},
+  2021: { enrollment: 7500,  salary: 63459, success: 96.2,  invest: 220.5},
+  2022: { enrollment: 7470,  salary: 67911, success: 95.7,  invest: 220.5},
+  2023: { enrollment: 7470,  salary: 71832, success: 95,    invest: 220.5},
+  2024: { enrollment: 7470,  salary: 71832, success: 95,    invest: 220.5},
+};
+
+const TAG = (label, cls) => `<span class="ev-tag ${cls}">${label}</span>`;
+
+const EVENTS = {
+  1999: {
+    gu: [
+      { title: "First Elite Eight Appearance", sub: "Gonzaga becomes a national basketball story — catapulting the university into the national spotlight and driving enrollment interest.", tags: [TAG("Sports","tag-sport")] },
+    ],
+    sp: [
+      { title: "Spokane: Status Quo", sub: "Regional service city. Convention and tourism infrastructure modest. Riverfront Park unchanged since 1974 World's Fair.", tags: [TAG("Context","tag-context")] },
+    ],
+  },
+  2000: {
+    gu: [
+      { title: "New School of Law Building", sub: "110,000 sq ft facility — $17.5M investment. Establishes Gonzaga as a full professional school institution and academic anchor for the region.", tags: [TAG("$17.5M","tag-invest"), TAG("Academic","tag-academic")] },
+    ],
+    sp: [
+      { title: "Pre-Revitalization Era", sub: "Downtown redevelopment has not yet begun. Riverfront Park largely unchanged since 1974 World's Fair. Convention and tourism infrastructure still modest.", tags: [TAG("Context","tag-context")] },
+    ],
+  },
+  2001: {
+    gu: [
+      { title: "Enrollment Reaches 5,300", sub: "Up from 4,507 in 1998 — a 17.5% jump driven by basketball visibility and new academic programs. On a trajectory to 7,319 by 2008.", tags: [TAG("Enrollment +17%","tag-enroll")] },
+    ],
+    sp: [
+      { title: "Regional Service Economy", sub: "Spokane remains a mid-size regional hub. Growing awareness of Gonzaga as a destination university begins feeding hospitality and housing demand.", tags: [TAG("Context","tag-context")] },
+    ],
+  },
+  2002: {
+    gu: [
+      { title: "Dillon + Goller Halls", sub: "New residence halls built to accommodate rising enrollment demand. Student housing becomes a campus infrastructure priority.", tags: [TAG("Housing","tag-invest")] },
+    ],
+    sp: [
+      { title: "Early Housing Demand Signal", sub: "Gonzaga's growing student body begins generating off-campus housing demand in adjacent Spokane neighborhoods.", tags: [TAG("Context","tag-context")] },
+    ],
+  },
+  2003: {
+    gu: [
+      { title: "Largest Construction Year in School History", sub: "Hughes Hall expansion (37,000 sq ft) + Jepson Center addition (30,000 sq ft). Campus infrastructure scales rapidly to meet demand.", tags: [TAG("Academic","tag-academic"), TAG("Record Build","tag-invest")] },
+    ],
+    sp: [
+      { title: "Tourism & Sports Visitor Growth", sub: "Gonzaga's March Madness runs begin driving visiting families and sports tourism to Spokane hotels, restaurants, and Riverfront Park.", tags: [TAG("Tourism","tag-city")] },
+    ],
+  },
+  2004: {
+    gu: [
+      { title: "McCarthey Athletic Center Opens", sub: "$23M arena — 6,000 seats. Transforms Gonzaga into a destination athletics venue. Hosts nationally televised games and conference tournaments.", tags: [TAG("$23M","tag-invest"), TAG("Sports","tag-sport")] },
+    ],
+    sp: [
+      { title: "Sports Tourism Accelerates", sub: "McCarthey Center draws national TV cameras to Spokane. City begins recognizing athletics as an economic driver. Downtown hospitality benefits.", tags: [TAG("City Impact","tag-city")] },
+    ],
+  },
+  2005: {
+    gu: [
+      { title: "Undergraduate Nursing Program Launched", sub: "Gonzaga enters healthcare education — a direct pipeline into Spokane's largest employment sector (Providence, MultiCare, CHAS Health).", tags: [TAG("Academic","tag-academic"), TAG("Healthcare","tag-partner")] },
+    ],
+    sp: [
+      { title: "Healthcare Workforce Demand Grows", sub: "Regional health systems begin looking to Gonzaga as a local nursing and health sciences talent source. Partnership ecosystem begins forming.", tags: [TAG("Workforce","tag-city")] },
+    ],
+  },
+  2006: {
+    gu: [
+      { title: "ESPN College GameDay Comes to Gonzaga", sub: "First non-football school west of Mississippi to host College GameDay. National media exposure for Gonzaga — and for Spokane.", tags: [TAG("National Media","tag-sport")] },
+      { title: "Hughes Hall Bio & Chemistry Wing", sub: "Expands science facilities to support growing pre-med and nursing student populations.", tags: [TAG("Academic","tag-academic")] },
+    ],
+    sp: [
+      { title: "National Visibility for Spokane", sub: "ESPN broadcast puts Spokane on a national map as a college sports city. City leaders begin discussing leveraging athletics for downtown identity.", tags: [TAG("City Brand","tag-city")] },
+    ],
+  },
+  2007: {
+    gu: [
+      { title: "Kennedy Apartments", sub: "75 units, 220 students — purpose-built student housing expanding campus residential capacity.", tags: [TAG("Housing","tag-invest")] },
+      { title: "Petterson Baseball Complex", sub: "$7M facility. Gonzaga athletics expand beyond basketball, diversifying campus investment.", tags: [TAG("$7M","tag-invest"), TAG("Sports","tag-sport")] },
+    ],
+    sp: [
+      { title: "Kendall Yards Planning Begins", sub: "Early discussions for redeveloping the Kendall Yards site — a 78-acre brownfield adjacent to campus. Gonzaga's growth makes nearby development viable.", tags: [TAG("Urban Dev","tag-city")] },
+    ],
+  },
+  2008: {
+    gu: [
+      { title: "Enrollment Reaches 7,319", sub: "From 4,507 in 1998 to 7,319 — a 62% increase in a decade. Gonzaga is now a large regional university and a top-5 non-government employer in Spokane County.", tags: [TAG("Enrollment 62%↑","tag-enroll")] },
+    ],
+    sp: [
+      { title: "Gonzaga Becomes Top-5 Employer", sub: "With 1,100+ employees and 7,000+ students, Gonzaga's economic footprint rivals Spokane's largest institutions. Local employment and spending impact is significant.", tags: [TAG("Economy","tag-city")] },
+    ],
+  },
+  2009: {
+    gu: [
+      { title: "Coughlin Hall", sub: "$16M residence hall — further expands on-campus housing capacity to meet enrollment demand.", tags: [TAG("$16M","tag-invest"), TAG("Housing","tag-invest")] },
+    ],
+    sp: [
+      { title: "Downtown Hospitality Expansion", sub: "Riverfront redevelopment planning gains momentum. Early downtown hospitality investment follows growing sports tourism and visiting family traffic.", tags: [TAG("Urban Dev","tag-city")] },
+    ],
+  },
+  2010: {
+    gu: [
+      { title: "Sustained Growth Period", sub: "Gonzaga consolidates its position: enrollment stable at 7,600+, operating budget growing, endowment building.", tags: [TAG("Stability","tag-enroll")] },
+    ],
+    sp: [
+      { title: "Riverfront Redevelopment Planning", sub: "City of Spokane formalizes plans to redevelop Riverfront Park — conversations mirror Gonzaga's own campus master planning process.", tags: [TAG("Planning","tag-city")] },
+    ],
+  },
+  2011: {
+    gu: [
+      { title: "Pre-Hemmingson Era", sub: "Campus Master Plan identifies student union replacement as the next major investment. Alumni and donor conversations begin.", tags: [TAG("Planning","tag-academic")] },
+    ],
+    sp: [
+      { title: "Growing Sports Tourism Economy", sub: "Gonzaga's regular March Madness appearances generate consistent annual visitor traffic. Spokane hospitality sector expanding to capture demand.", tags: [TAG("Tourism","tag-city")] },
+    ],
+  },
+  2012: {
+    gu: [
+      { title: "BARC Retail Center", sub: "$15M mixed-use development — 650 parking spaces + retail. Gonzaga now operating as a real estate and urban development anchor.", tags: [TAG("$15M","tag-invest")] },
+      { title: "By 2012: Major Institution", sub: "Enrollment: 7,800+ | Operating Budget: ~$250M | Endowment: ~$148M | Employees: 1,100+ | Top 5 non-government employer in Spokane County.", tags: [TAG("Milestone","tag-enroll")] },
+    ],
+    sp: [
+      { title: "Kendall Yards Development Launches", sub: "First major housing and retail in Kendall Yards — the riverside neighborhood adjacent to Gonzaga campus. University growth makes the location viable.", tags: [TAG("Urban Dev","tag-city"), TAG("Infra","tag-infra")] },
+    ],
+  },
+  2013: {
+    gu: [
+      { title: "Hemmingson Center Approved", sub: "$60M student union project. The largest single capital project in Gonzaga history at the time. Transforms campus center.", tags: [TAG("$60M","tag-invest")] },
+    ],
+    sp: [
+      { title: "Downtown Hospitality Boom", sub: "Hotel capacity in downtown Spokane expands. The Davenport Grand Hotel project announced — directly tied to growing sports and conference demand.", tags: [TAG("Hospitality","tag-city")] },
+    ],
+  },
+  2014: {
+    gu: [
+      { title: "Hemmingson Center Under Construction", sub: "Largest construction project on campus — $60M student union reshaping the heart of campus.", tags: [TAG("$60M","tag-invest")] },
+    ],
+    sp: [
+      { title: "$64M Riverfront Park Redevelopment Bond", sub: "Spokane voters approve $64M bond to overhaul Riverfront Park — the city's most significant infrastructure investment in decades. Mirrors Gonzaga's scale of ambition.", tags: [TAG("$64M","tag-infra"), TAG("Milestone","tag-city")] },
+    ],
+  },
+  2015: {
+    gu: [
+      { title: "Hemmingson Center Opens", sub: "New campus hub — student dining, event space, student services. Becomes the social and civic center of campus life.", tags: [TAG("$60M","tag-invest"), TAG("Milestone","tag-academic")] },
+    ],
+    sp: [
+      { title: "Riverfront Redevelopment Begins", sub: "Construction starts on Riverfront Park overhaul. The $64M project runs 2015–2021, transforming Spokane's downtown park and public identity.", tags: [TAG("$64M","tag-infra")] },
+    ],
+  },
+  2016: {
+    gu: [
+      { title: "UW–Gonzaga Health Partnership", sub: "Gonzaga partners with University of Washington School of Medicine — creating a regional medical education pipeline and strengthening Spokane's healthcare workforce.", tags: [TAG("Healthcare","tag-partner"), TAG("Academic","tag-academic")] },
+      { title: "First Destination Tracking: 94% Success", sub: "94% of graduates employed or in graduate school. Average salary $48,119. Spokane ranks among top destination cities.", tags: [TAG("Outcome 94%","tag-enroll")] },
+    ],
+    sp: [
+      { title: "Davenport Grand Hotel Opens", sub: "444-room hotel expands Spokane's convention and hospitality capacity — built to capture sports tourism, conferences, and university family visits.", tags: [TAG("Hospitality","tag-city")] },
+    ],
+  },
+  2017: {
+    gu: [
+      { title: "Graduate Outcomes: 95% Success", sub: "Average salary rises to $59,710 — a 24% jump from 2016. Gonzaga graduates increasingly entering professional roles in Spokane's key sectors.", tags: [TAG("Outcome 95%","tag-enroll"), TAG("Salary +24%","tag-invest")] },
+    ],
+    sp: [
+      { title: "Riverfront Park Midway Progress", sub: "New pavilion, ice ribbon, and children's area open in Riverfront Park. Downtown Spokane visitor numbers grow. Sports tourism infrastructure expanding.", tags: [TAG("Infra","tag-infra")] },
+    ],
+  },
+  2018: {
+    gu: [
+      { title: "Graduate Salary: $61,520", sub: "Continued salary growth — graduates entering higher-paying roles in healthcare, engineering, and professional services across Spokane and the region.", tags: [TAG("Salary","tag-enroll")] },
+    ],
+    sp: [
+      { title: "Spokane Workforce Talent Demand", sub: "Regional employers Providence, MultiCare, Avista, Schweitzer Engineering actively recruit on Gonzaga campus. Talent pipeline strengthens.", tags: [TAG("Workforce","tag-city")] },
+    ],
+  },
+  2019: {
+    gu: [
+      { title: "Graduate Salary: $63,853 | Success: 95.5%", sub: "Gonzaga graduates consistently among top earners from regional universities. Spokane remains the #1 graduate destination city.", tags: [TAG("Outcome 95.5%","tag-enroll")] },
+    ],
+    sp: [
+      { title: "Pre-Pandemic Peak", sub: "Spokane's downtown economy at a multi-decade high. Sports events, conventions, and university activity driving hospitality revenue.", tags: [TAG("Economy","tag-city")] },
+    ],
+  },
+  2020: {
+    gu: [
+      { title: "Pandemic Impact: Success Rate Drops to 89%", sub: "First significant dip in graduate outcomes. Salary data: $66,166 — partially inflated by healthcare emergency hiring. Campus operations shift online.", tags: [TAG("Pandemic","tag-context"), TAG("Outcome 89%","tag-enroll")] },
+    ],
+    sp: [
+      { title: "Pandemic Economic Disruption", sub: "Hospitality, retail, and tourism sectors in Spokane severely impacted. However, healthcare and education — Gonzaga's primary pipeline sectors — remain stable.", tags: [TAG("Pandemic","tag-context")] },
+    ],
+  },
+  2021: {
+    gu: [
+      { title: "Bollier Center for Integrated Science & Engineering", sub: "82,000 sq ft — $82M state-of-the-art facility for engineering, computer science, and applied sciences. Gonzaga's largest academic building.", tags: [TAG("$82M","tag-invest"), TAG("Milestone","tag-academic")] },
+      { title: "Outcomes Rebound: 96.2% Success Rate", sub: "Strongest outcome year on record. Healthcare and technology sectors driving graduate placement. Salary: $63,459.", tags: [TAG("Outcome 96.2%","tag-enroll")] },
+    ],
+    sp: [
+      { title: "The Podium Opens", sub: "135,000 sq ft indoor sports and event facility — Spokane's largest indoor venue. Directly targets the sports tourism market that Gonzaga basketball helped create.", tags: [TAG("$50M+","tag-infra"), TAG("Sports","tag-city")] },
+      { title: "Riverfront Park Redevelopment Complete", sub: "The $64M renovation completes after 6 years. Gondola, new pavilion, children's park, and event lawn transform the park into a regional destination.", tags: [TAG("$64M Complete","tag-infra")] },
+    ],
+  },
+  2022: {
+    gu: [
+      { title: "Knowledge Rate 69% | Success Rate 95.7%", sub: "Gonzaga tracks 1,319 of 1,911 graduates. 76.8% employed, 15.8% in graduate school. Average salary $67,911.", tags: [TAG("Outcome 95.7%","tag-enroll")] },
+      { title: "Top Employer: Providence (40 hires)", sub: "Providence Health & Services–Swedish hires 40 graduates. Gonzaga University (31), MultiCare (12) follow. Spokane healthcare is the dominant employer.", tags: [TAG("Workforce","tag-partner")] },
+    ],
+    sp: [
+      { title: "Spokane #1 Grad Destination (317 grads)", sub: "For 2022–23 data: 317 Gonzaga graduates choose Spokane as their first destination city — more than Seattle (265), Portland, or any other city.", tags: [TAG("Milestone","tag-city"), TAG("#1 City","tag-infra")] },
+    ],
+  },
+  2023: {
+    gu: [
+      { title: "Graduate Salary: $71,832", sub: "49% salary increase since 2016 tracking began. Gonzaga graduates are among the highest-earning from regional universities in the Pacific Northwest.", tags: [TAG("Salary +49%","tag-enroll")] },
+    ],
+    sp: [
+      { title: "ONE Spokane Stadium Opens", sub: "New multi-use stadium — home to USL Spokane soccer and events. Completes a decade-long transformation of Spokane's sports and entertainment infrastructure.", tags: [TAG("Stadium","tag-infra")] },
+    ],
+  },
+  2024: {
+    gu: [
+      { title: "Current Enrollment: 7,470", sub: "Gonzaga now operates with a $250M+ operating budget, $148M+ endowment, 1,100+ employees, and a graduate talent pipeline feeding every major Spokane industry.", tags: [TAG("Enrollment","tag-enroll")] },
+    ],
+    sp: [
+      { title: "Spokane Airport TREX Expansion", sub: "New gates and terminal expansion — Spokane International Airport grows to handle increased regional traffic, partly driven by Gonzaga family and alumni travel.", tags: [TAG("Infrastructure","tag-infra")] },
+      { title: "A Transformed City", sub: "Spokane's downtown in 2024 bears little resemblance to 2000. The Riverfront, Kendall Yards, The Podium, and ONE Stadium represent $200M+ of investment — parallel to Gonzaga's own campus transformation.", tags: [TAG("Milestone","tag-city")] },
+    ],
+  },
+};
+
+// ── BUILD TIMELINE ─────────────────────────────────────────────────────────
+const years = Object.keys(EVENTS).map(Number).sort((a,b)=>a-b);
+let activeYear = 2000;
+
+function eraFor(y) {
+  for (const e of ERAS) if (e.years.includes(y)) return e;
+  return null;
+}
+function hasGu(y) { return EVENTS[y]?.gu?.length > 0; }
+function hasSp(y) { return EVENTS[y]?.sp?.length > 0; }
+
+function buildTimeline() {
+  const eraRow   = document.getElementById('eraRow');
+  const nodesDiv = document.getElementById('timelineNodes');
+
+  // era labels (approximate widths)
+  ERAS.forEach(era => {
+    const label = document.createElement('div');
+    label.className = 'era-label';
+    label.style.background = era.color;
+    label.style.width = `${era.years.length * 54}px`;
+    label.textContent = era.label;
+    eraRow.appendChild(label);
+  });
+
+  years.forEach(y => {
+    const node = document.createElement('div');
+    node.className = 'year-node';
+    const both = hasGu(y) && hasSp(y);
+    const onlyGu = hasGu(y) && !hasSp(y);
+    const onlySp = !hasGu(y) && hasSp(y);
+    if (both)   node.classList.add('has-both');
+    if (onlyGu) node.classList.add('has-gu');
+    if (onlySp) node.classList.add('has-sp');
+    node.innerHTML = `<div class="node-dot"></div><div class="node-year">'${String(y).slice(2)}</div>`;
+    node.addEventListener('click', () => setYear(y));
+    node.dataset.year = y;
+    nodesDiv.appendChild(node);
+  });
+}
+
+function setYear(y) {
+  activeYear = y;
+
+  // update active node
+  document.querySelectorAll('.year-node').forEach(n => {
+    n.classList.toggle('active', +n.dataset.year === y);
+  });
+
+  // scroll node into view
+  const activeNode = document.querySelector(`.year-node[data-year="${y}"]`);
+  if (activeNode) activeNode.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
+
+  // big year
+  document.getElementById('bigYear').textContent = y;
+
+  // era tag
+  const era = eraFor(y);
+  const eraTag = document.getElementById('eraTag');
+  eraTag.textContent = era ? era.label : '';
+  eraTag.style.background = era ? era.color : '#999';
+
+  // render events
+  renderEvents('guBody', EVENTS[y]?.gu || [], 'gu');
+  renderEvents('spBody', EVENTS[y]?.sp || [], 'sp');
+
+  // nav
+  const idx = years.indexOf(y);
+  document.getElementById('navYear').textContent = y;
+  document.getElementById('prevBtn').disabled = idx === 0;
+  document.getElementById('nextBtn').disabled = idx === years.length - 1;
+
+  // growth bars
+  updateBars(y);
+}
+
+function renderEvents(containerId, events, side) {
+  const el = document.getElementById(containerId);
+  if (!events.length) {
+    el.innerHTML = `<div class="empty-state">No recorded events for ${activeYear}</div>`;
+    return;
+  }
+  el.innerHTML = events.map(ev => `
+    <div class="event-card">
+      <div class="ev-title">${ev.title}</div>
+      <div class="ev-sub">${ev.sub}</div>
+      <div>${(ev.tags || []).join(' ')}</div>
+    </div>
+  `).join('');
+}
+
+function updateBars(y) {
+  const m = METRICS[y] || {};
+  const maxEnroll  = 7800;
+  const maxSalary  = 75000;
+  const maxInvest  = 220.5;
+
+  const pct = (v, max) => v != null ? Math.round((v / max) * 100) : null;
+
+  const set = (barId, valId, pctVal, displayVal) => {
+    const bar = document.getElementById(barId);
+    const val = document.getElementById(valId);
+    if (pctVal == null) {
+      bar.style.width = '0%';
+      val.textContent = '—';
+    } else {
+      bar.style.width = Math.min(pctVal, 100) + '%';
+      val.textContent = displayVal;
+    }
+  };
+
+  set('barEnroll',  'valEnroll',  pct(m.enrollment, maxEnroll),  m.enrollment ? m.enrollment.toLocaleString() : null);
+  set('barSalary',  'valSalary',  pct(m.salary,  maxSalary),  m.salary  ? `$${(m.salary/1000).toFixed(1)}k` : null);
+  set('barSuccess', 'valSuccess', m.success,                   m.success ? `${m.success}%`   : null);
+  set('barInvest',  'valInvest',  pct(m.invest,  maxInvest),   m.invest  ? `$${m.invest}M`   : null);
+}
+
+function navigate(dir) {
+  const idx = years.indexOf(activeYear);
+  const next = years[idx + dir];
+  if (next) setYear(next);
+}
+
+// ── KEYBOARD NAV ──────────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft')  navigate(-1);
+  if (e.key === 'ArrowRight') navigate(1);
+});
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+buildTimeline();
+setYear(2000);
+</script>
+</body>
+</html>
