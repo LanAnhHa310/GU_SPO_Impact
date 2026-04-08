@@ -418,7 +418,7 @@
       <div class="metric-value" id="valSuccess">—</div>
     </div>
     <div class="metric-row">
-      <div class="metric-label">GU Campus Invest.</div>
+      <div class="metric-label">New Campus Invest.</div>
       <div class="bar-wrap"><div class="bar-fill" id="barInvest" style="background:var(--era2);width:0%"></div></div>
       <div class="metric-value" id="valInvest">—</div>
     </div>
@@ -780,14 +780,14 @@ function updateBars(y) {
   const m = METRICS[y] || {};
   const maxEnroll  = 7800;
   const maxSalary  = 75000;
-  const maxInvest  = 220.5;
+  const maxDeltaInvest = 82; // largest single-year investment (Bollier Center, 2021)
 
   const pct = (v, max) => v != null ? Math.round((v / max) * 100) : null;
 
   const set = (barId, valId, pctVal, displayVal) => {
     const bar = document.getElementById(barId);
     const val = document.getElementById(valId);
-    if (pctVal == null) {
+    if (pctVal == null || pctVal === 0) {
       bar.style.width = '0%';
       val.textContent = '—';
     } else {
@@ -796,10 +796,15 @@ function updateBars(y) {
     }
   };
 
+  // Campus investment: show only new spending that year (delta from prior year)
+  const prevYear = years[years.indexOf(y) - 1];
+  const prevInvest = prevYear ? (METRICS[prevYear]?.invest || 0) : 0;
+  const deltaInvest = (m.invest || 0) - prevInvest;
+
   set('barEnroll',  'valEnroll',  pct(m.enrollment, maxEnroll),  m.enrollment ? m.enrollment.toLocaleString() : null);
-  set('barSalary',  'valSalary',  pct(m.salary,  maxSalary),  m.salary  ? `$${(m.salary/1000).toFixed(1)}k` : null);
-  set('barSuccess', 'valSuccess', m.success,                   m.success ? `${m.success}%`   : null);
-  set('barInvest',  'valInvest',  pct(m.invest,  maxInvest),   m.invest  ? `$${m.invest}M`   : null);
+  set('barSalary',  'valSalary',  pct(m.salary,  maxSalary),     m.salary     ? `$${(m.salary/1000).toFixed(1)}k` : null);
+  set('barSuccess', 'valSuccess', m.success,                     m.success    ? `${m.success}%` : null);
+  set('barInvest',  'valInvest',  pct(deltaInvest, maxDeltaInvest), deltaInvest > 0 ? `$${deltaInvest}M` : null);
 }
 
 function navigate(dir) {
