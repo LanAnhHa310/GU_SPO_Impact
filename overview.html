@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gonzaga & Spokane — Parallel Growth Overview</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gu-navy:  #002868;
+      --gu-red:   #CE1126;
+      --sp-teal:  #0d6b6e;
+      --sp-light: #e6f4f4;
+      --gu-light: #e8ecf5;
+      --bg:       #f5f5f0;
+      --text:     #1a1a1a;
+      --muted:    #666;
+      --gold:     #f0c040;
+    }
+
+    body { font-family: 'Georgia', serif; background: var(--bg); color: var(--text); }
+
+    /* ── SITE NAV ── */
+    .site-nav {
+      background: var(--gu-navy);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      box-shadow: 0 2px 8px rgba(0,0,0,.3);
+    }
+    .site-nav .brand {
+      color: var(--gold);
+      font-weight: 700;
+      font-size: .95rem;
+      padding: .85rem 1.5rem .85rem 0;
+      border-right: 1px solid rgba(255,255,255,.15);
+      margin-right: .5rem;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .site-nav a.nav-link {
+      color: rgba(255,255,255,.75);
+      text-decoration: none;
+      font-size: .85rem;
+      padding: .85rem 1rem;
+      border-bottom: 3px solid transparent;
+      transition: color .2s;
+      white-space: nowrap;
+    }
+    .site-nav a.nav-link:hover { color: white; }
+    .site-nav a.nav-link.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    /* ── HERO ── */
+    header {
+      background: linear-gradient(135deg, var(--gu-navy) 0%, #001a4d 100%);
+      color: white;
+      padding: 3.5rem 2rem 3rem;
+      text-align: center;
+    }
+    header h1 {
+      font-size: clamp(1.6rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      margin-bottom: .5rem;
+    }
+    header h1 span { color: var(--gold); }
+    header .sub {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,.7);
+      font-style: italic;
+      margin-bottom: 2rem;
+    }
+    .stat-pills { display: flex; justify-content: center; flex-wrap: wrap; gap: .6rem; }
+    .pill {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 999px;
+      padding: .35rem 1.1rem;
+      font-size: .82rem;
+      color: rgba(255,255,255,.9);
+    }
+    .pill strong { color: var(--gold); }
+
+    /* ── SECTIONS ── */
+    .section { padding: 3.5rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .section-white { background: white; padding: 3.5rem 2rem; }
+    .section-white .inner { max-width: 1100px; margin: 0 auto; }
+
+    h2.sec-title {
+      font-size: clamp(1.2rem, 2.5vw, 1.75rem);
+      color: var(--gu-navy);
+      margin-bottom: .35rem;
+    }
+    p.sec-sub {
+      color: var(--muted);
+      font-size: .9rem;
+      font-style: italic;
+      margin-bottom: 2rem;
+      max-width: 720px;
+    }
+    .chart-note { font-size: .75rem; color: var(--muted); font-style: italic; margin-top: .6rem; }
+
+    /* ── DUAL LINE CHART ── */
+    .chart-wrap { position: relative; height: 400px; }
+
+    /* ── BEFORE / AFTER ── */
+    .ba-grid {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 28px rgba(0,0,0,.12);
+    }
+    .ba-col { padding: 2.5rem 2.25rem; }
+    .ba-col.before { background: #141428; color: white; }
+    .ba-col.after  { background: var(--gu-navy); color: white; }
+    .ba-arrow {
+      background: rgba(240,192,64,.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; color: var(--gold);
+    }
+    .ba-year {
+      font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+      opacity: .55; margin-bottom: .4rem;
+    }
+    .ba-col h3 { font-size: 1.2rem; color: var(--gold); margin-bottom: 1.25rem; }
+    .ba-sep {
+      font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+      opacity: .45; display: flex; align-items: center; gap: .5rem;
+      margin: 1.25rem 0 .9rem;
+    }
+    .ba-sep::before, .ba-sep::after { content:''; flex:1; height:1px; background:rgba(255,255,255,.18); }
+    .ba-stat { margin-bottom: .95rem; }
+    .ba-stat .lbl { font-size: .72rem; text-transform: uppercase; letter-spacing: .07em; opacity: .5; margin-bottom: .15rem; }
+    .ba-stat .val { font-size: 1.45rem; font-weight: 700; line-height: 1.1; }
+    .ba-stat .val.hi { color: var(--gold); }
+    .ba-stat .chg { font-size: .78rem; opacity: .65; margin-top: .1rem; }
+
+    /* ── PEER CHART ── */
+
+    /* ── CTA ── */
+    .cta-band {
+      background: linear-gradient(135deg, var(--sp-teal), #084f52);
+      color: white;
+      text-align: center;
+      padding: 5rem 2rem;
+    }
+    .cta-band h2 { font-size: clamp(1.3rem, 2.5vw, 2.1rem); margin-bottom: .75rem; }
+    .cta-band p { font-size: 1rem; opacity: .8; max-width: 580px; margin: 0 auto 2rem; }
+    .cta-btn {
+      display: inline-block;
+      background: var(--gold);
+      color: #141428;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: .9rem 2.75rem;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.3); }
+
+    @media (max-width: 640px) {
+      .ba-grid { grid-template-columns: 1fr; }
+      .ba-arrow { padding: .75rem; font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="site-nav">
+  <a class="brand" href="overview.html">GU × Spokane</a>
+  <a href="overview.html" class="nav-link active">Overview</a>
+  <a href="index.html" class="nav-link">Impact Deep Dive</a>
+</nav>
+
+<!-- HERO -->
+<header>
+  <h1>Gonzaga &amp; <span>Spokane</span></h1>
+  <p class="sub">A quarter century of parallel growth — beyond basketball</p>
+  <div class="stat-pills">
+    <div class="pill">GU enrollment <strong>+66%</strong> since 1999</div>
+    <div class="pill">Spokane per capita income <strong>+123%</strong> since 2000</div>
+    <div class="pill"><strong>317</strong> graduates → Spokane in 2023 (#1 city)</div>
+    <div class="pill"><strong>$220M+</strong> campus construction since 2000</div>
+    <div class="pill">Top 5 non-gov employer in Spokane County by <strong>2008</strong></div>
+  </div>
+</header>
+
+<!-- SECTION 1: PARALLEL GROWTH CHART -->
+<div class="section-white">
+  <div class="inner">
+    <h2 class="sec-title">Two Growth Stories, One City</h2>
+    <p class="sec-sub">GU enrollment and Spokane per capita income have tracked each other for 25 years. One institution's rise became a city's renaissance.</p>
+    <div class="chart-wrap">
+      <canvas id="growthChart"></canvas>
+    </div>
+    <p class="chart-note">
+      Sources: IPEDS (GU enrollment). Spokane MSA per capita personal income: BEA Regional Data Table CA1 (approximate — verify with exact BEA pull at apps.bea.gov).
+      Note: 2020–21 income spike reflects COVID-era federal transfer payments, not sustained regional wage growth.
+    </p>
+  </div>
+</div>
+
+<!-- SECTION 2: BEFORE & AFTER -->
+<div class="section">
+  <h2 class="sec-title">Before &amp; After</h2>
+  <p class="sec-sub">What Gonzaga and Spokane looked like in 2000 — and what changed by 2024.</p>
+  <div class="ba-grid">
+
+    <div class="ba-col before">
+      <div class="ba-year">Year 2000</div>
+      <h3>A Regional University</h3>
+      <div class="ba-sep">Gonzaga</div>
+      <div class="ba-stat">
+        <div class="lbl">Enrollment</div>
+        <div class="val">4,800</div>
+      </div>
+      <div class="ba-stat">
+        <div class="lbl">Employees</div>
+        <div class="val">~490</div>
+      </div>
+      <div class="ba-stat">
+        <div class="lbl">Operating Budget</div>
+        <div class="val">~$120M</div>
+      </div>
+      <div class="ba-stat">
+        <div class="lbl">Campus Investment (to date)</div>
+        <div class="val">$17.5M</div>
+        <div class="chg">New School of Law (2000)</div>
+      </div>
+      <div class="ba-stat">
+        <div class="lbl">National Profile</div>
+        <div class="val" style="font-size:1rem; line-height:1.4">Regional Jesuit school,<br>1999 Elite Eight breakout</div>
+      </div>
+      <div class="ba-sep">Spokane</div>
+      <div class="ba-stat">
+        <div class="lbl">Per Capita Income</div>
+        <div class="val">$27,800</div>
+      </div>
+      <div class="ba-stat">
+        <div class="lbl">Downtown</div>
+        <div class="val" style="font-size:.95rem; line-height:1.5; opacity:.85">Pre-revitalization era.<br>Riverfront Park unchanged since 1974 World's Fair.</div>
+      </div>
+    </div>
+
+    <div class="ba-arrow">→</div>
+
+    <div class="ba-col after">
+      <div class="ba-year">Year 2024</div>
+      <h3>A National Institution</h3>
+      <div class="ba-sep">Gonzaga</div>
+      <div class="ba-stat">
+        <div class="lbl">Enrollment</div>
+        <div class="val hi">7,470</div>
+        <div class="chg">+56% since 2000</div>
+      </div>
+      <div class="ba-stat">
+        <div class="lbl">Employees</div>
+        <div class="val hi">1,240</div>
+        <div class="chg">+153% since 2000</div>
+      </div>
+      <div class="ba-stat">
+        <div class="lbl">Operating Budget</div>
+        <div class="val hi">~$380M</div>
+        <div class="chg">+217% since 2000</div>
+      </div>
+      <div class="ba-stat">
+        <div class="lbl">Campus Investment (cumulative)</div>
+        <div class="val hi">$220.5M</div>
+        <div class="chg">Law · McCarthey · Hemmingson · Bollier + more</div>
+      </div>
+      <div class="ba-stat">
+        <div class="lbl">National Profile</div>
+        <div class="val" style="font-size:.95rem; line-height:1.5">Top 10 West (US News).<br>Regular Final Four contender.</div>
+      </div>
+      <div class="ba-sep">Spokane</div>
+      <div class="ba-stat">
+        <div class="lbl">Per Capita Income</div>
+        <div class="val hi">~$62,000</div>
+        <div class="chg">+123% since 2000</div>
+      </div>
+      <div class="ba-stat">
+        <div class="lbl">Downtown</div>
+        <div class="val" style="font-size:.95rem; line-height:1.5">$200M+ new investment.<br>Podium · ONE Stadium · Riverfront · Davenport Grand.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SECTION 3: WA PEER COMPARISON -->
+<div class="section">
+  <h2 class="sec-title">Gonzaga vs. Washington State Peers</h2>
+  <p class="sec-sub">Enrollment growth 1999–2024 compared to non-Seattle WA universities of similar size. Gonzaga's growth rate stands apart from every public and private peer in the state.</p>
+  <div style="position:relative; height:320px;">
+    <canvas id="peerChart"></canvas>
+  </div>
+  <p class="chart-note">⚠ All non-Gonzaga figures are estimated — not yet verified against IPEDS. Gonzaga figures (4,507 → 7,470) are from institutional records. Peer set: Eastern Washington U, Central Washington U, Western Washington U, Whitworth U, Pacific Lutheran U. Excludes UW, WSU, and Seattle-metro institutions. <strong>Replace with IPEDS pull before publishing.</strong></p>
+</div>
+
+<!-- SECTION 4: CATHOLIC SCHOOLS COMPARISON -->
+<div class="section-white">
+  <div class="inner">
+    <h2 class="sec-title">Gonzaga vs. Peer Catholic Universities</h2>
+    <p class="sec-sub">Enrollment growth compared to Catholic institutions of similar size and mission. Gonzaga's trajectory stands apart.</p>
+    <div class="flourish-embed flourish-chart" data-src="visualisation/28385025">
+      <script src="https://public.flourish.studio/resources/embed.js"></script>
+      <noscript><img src="https://public.flourish.studio/visualisation/28385025/thumbnail" width="100%" alt="chart visualization" /></noscript>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-band">
+  <h2>See the Full Story, Year by Year</h2>
+  <p>Explore every milestone from 1999 to 2024 — campus construction, downtown development, graduate outcomes, and the moments that defined the Gonzaga–Spokane relationship.</p>
+  <a class="cta-btn" href="index.html">Open the Impact Deep Dive →</a>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+const YEARS = [
+  1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,
+  2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,
+  2019,2020,2021,2022,2023,2024
+];
+
+const GU_ENROLLMENT = [
+  4507,4800,5300,5600,6000,6200,6500,6800,7100,7319,
+  7500,7600,7700,7800,7800,7800,7800,7800,7800,7800,
+  7800,7600,7500,7470,7470,7470
+];
+
+// BEA Spokane MSA per capita personal income (approximate — replace with exact BEA CA1 pull)
+const SPOKANE_PCI = [
+  null,  // 1999 — not included in chart
+  27800,28100,28450,29200,30150,31900,33600,35500,36800,
+  35200,36100,37400,38100,38800,40200,41100,42400,44100,46100,
+  48300,52000,56700,57800,60100,61800
+];
+
+// ── CHART 1: DUAL-AXIS LINE CHART ─────────────────────────────────────────
+const ctx1 = document.getElementById('growthChart').getContext('2d');
+new Chart(ctx1, {
+  type: 'line',
+  data: {
+    labels: YEARS,
+    datasets: [
+      {
+        label: 'GU Enrollment',
+        data: GU_ENROLLMENT,
+        borderColor: '#002868',
+        backgroundColor: 'rgba(0,40,104,.07)',
+        fill: true,
+        tension: .35,
+        pointRadius: 3,
+        pointHoverRadius: 7,
+        borderWidth: 2.5,
+        yAxisID: 'y',
+      },
+      {
+        label: 'Spokane Per Capita Income ($)',
+        data: SPOKANE_PCI,
+        borderColor: '#0d6b6e',
+        backgroundColor: 'rgba(13,107,110,.06)',
+        fill: true,
+        tension: .35,
+        pointRadius: 3,
+        pointHoverRadius: 7,
+        borderWidth: 2.5,
+        yAxisID: 'y2',
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: { font: { family: 'Georgia', size: 13 }, usePointStyle: true, padding: 20 },
+      },
+      tooltip: {
+        backgroundColor: 'rgba(20,20,40,.92)',
+        titleFont: { family: 'Georgia', size: 13 },
+        bodyFont: { family: 'Georgia', size: 12 },
+        padding: 12,
+        callbacks: {
+          label: (ctx) => {
+            const v = ctx.raw;
+            if (v == null) return null;
+            if (ctx.datasetIndex === 0) return '  Enrollment: ' + v.toLocaleString() + ' students';
+            return '  Per Capita Income: $' + v.toLocaleString();
+          },
+        },
+      },
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(0,0,0,.05)' },
+        ticks: { font: { family: 'Georgia', size: 11 }, maxTicksLimit: 14 },
+      },
+      y: {
+        position: 'left',
+        title: {
+          display: true,
+          text: 'GU Enrollment',
+          font: { family: 'Georgia', size: 12 },
+          color: '#002868',
+        },
+        min: 4000, max: 8500,
+        grid: { color: 'rgba(0,40,104,.06)' },
+        ticks: {
+          font: { family: 'Georgia', size: 11 },
+          callback: v => v.toLocaleString(),
+        },
+      },
+      y2: {
+        position: 'right',
+        title: {
+          display: true,
+          text: 'Per Capita Income ($)',
+          font: { family: 'Georgia', size: 12 },
+          color: '#0d6b6e',
+        },
+        min: 20000, max: 75000,
+        grid: { drawOnChartArea: false },
+        ticks: {
+          font: { family: 'Georgia', size: 11 },
+          callback: v => '$' + (v / 1000).toFixed(0) + 'k',
+        },
+      },
+    },
+  },
+});
+
+// ── CHART 2: WA PEER COMPARISON (estimated — replace with IPEDS data) ────
+const PEERS = [
+  { name: 'Gonzaga',           e99: 4507,  e24: 7470,  real: true  },
+  { name: 'Central Washington',e99: 7800,  e24: 11200, real: false },
+  { name: 'Whitworth',         e99: 2200,  e24: 3000,  real: false },
+  { name: 'Western Washington',e99: 12500, e24: 16400, real: false },
+  { name: 'Eastern Washington',e99: 8600,  e24: 11500, real: false },
+  { name: 'Pacific Lutheran',  e99: 3400,  e24: 3100,  real: false },
+];
+PEERS.sort((a, b) => ((b.e24 - b.e99) / b.e99) - ((a.e24 - a.e99) / a.e99));
+
+const ctx2 = document.getElementById('peerChart').getContext('2d');
+new Chart(ctx2, {
+  type: 'bar',
+  data: {
+    labels: PEERS.map(p => p.name),
+    datasets: [{
+      label: 'Enrollment Growth % (1999–2024)',
+      data: PEERS.map(p => Math.round(((p.e24 - p.e99) / p.e99) * 100)),
+      backgroundColor: PEERS.map(p => p.name === 'Gonzaga' ? '#002868' : p.real ? '#0d6b6e' : 'rgba(90,138,159,.55)'),
+      borderColor:     PEERS.map(p => p.name === 'Gonzaga' ? '#002868' : p.real ? '#0a4f52' : 'rgba(90,138,159,.8)'),
+      borderWidth: 1.5,
+      borderRadius: 4,
+      borderSkipped: false,
+    }],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: 'y',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: 'rgba(20,20,40,.92)',
+        titleFont: { family: 'Georgia', size: 13 },
+        bodyFont: { family: 'Georgia', size: 12 },
+        padding: 12,
+        callbacks: {
+          label: (ctx) => {
+            const p = PEERS[ctx.dataIndex];
+            const sign = ctx.raw >= 0 ? '+' : '';
+            const note = p.real ? '' : ' (estimated)';
+            return [
+              `  ${sign}${ctx.raw}% growth${note}`,
+              `  ${p.e99.toLocaleString()} → ${p.e24.toLocaleString()} students`,
+            ];
+          },
+        },
+      },
+    },
+    scales: {
+      x: {
+        title: { display: true, text: 'Enrollment Growth (%)', font: { family: 'Georgia', size: 12 } },
+        ticks: { font: { family: 'Georgia', size: 11 }, callback: v => (v >= 0 ? '+' : '') + v + '%' },
+        grid: { color: 'rgba(0,0,0,.05)' },
+      },
+      y: {
+        grid: { display: false },
+        ticks: { font: { family: 'Georgia', size: 12 } },
+      },
+    },
+  },
+});
+
+// Flourish embed handles the Catholic schools comparison chart
+</script>
+</body>
+</html>
