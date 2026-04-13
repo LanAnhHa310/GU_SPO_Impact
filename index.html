@@ -259,6 +259,24 @@
       color: var(--muted);
       line-height: 1.4;
     }
+    .event-card .ev-invest {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--gu-navy);
+      letter-spacing: -.5px;
+      margin: .2rem 0 .15rem;
+      line-height: 1;
+    }
+    .event-card .ev-invest .ev-invest-label {
+      font-size: .65rem;
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-top: .15rem;
+    }
+
     .event-card .ev-tag {
       display: inline-block;
       font-size: .68rem;
@@ -1058,7 +1076,7 @@ const EVENTS = {
   },
   2000: {
     gu: [
-      { title: "New School of Law Building", sub: "110,000 sq ft facility — $15.7M investment (FY1998–2001). Establishes Gonzaga as a full professional school institution and academic anchor for the region.", tags: [TAG("$15.7M","tag-invest"), TAG("Academic","tag-academic")] },
+      { title: "New School of Law Building", invest: "$15.7M", sub: "110,000 sq ft facility (FY1998–2001). Establishes Gonzaga as a full professional school institution and academic anchor for the region.", tags: [TAG("$15.7M","tag-invest"), TAG("Academic","tag-academic")] },
     ],
     sp: [
       { title: "Pre-Revitalization Era", sub: "Downtown redevelopment has not yet begun. Riverfront Park largely unchanged since 1974 World's Fair. Convention and tourism infrastructure still modest.", tags: [TAG("Context","tag-context")] },
@@ -1090,7 +1108,7 @@ const EVENTS = {
   },
   2004: {
     gu: [
-      { title: "McCarthey Athletic Center Opens", sub: "$28.3M arena — 6,000 seats. Transforms Gonzaga into a destination athletics venue. Hosts nationally televised games and conference tournaments.", tags: [TAG("$28.3M","tag-invest"), TAG("Sports","tag-sport")] },
+      { title: "McCarthey Athletic Center Opens", invest: "$28.3M", sub: "6,000-seat arena. Transforms Gonzaga into a destination athletics venue. Hosts nationally televised games and conference tournaments.", tags: [TAG("$28.3M","tag-invest"), TAG("Sports","tag-sport")] },
     ],
     sp: [
       { title: "Sports Tourism Accelerates", sub: "McCarthey Center draws national TV cameras to Spokane. City begins recognizing athletics as an economic driver. Downtown hospitality benefits.", tags: [TAG("City Impact","tag-city")] },
@@ -1116,8 +1134,8 @@ const EVENTS = {
   2007: {
     gu: [
       { title: "Kennedy Apartments", sub: "75 units, 220 students — purpose-built student housing expanding campus residential capacity.", tags: [TAG("Housing","tag-invest")] },
-      { title: "Patterson Baseball Complex", sub: "$8.9M facility. Gonzaga athletics expand beyond basketball, diversifying campus investment.", tags: [TAG("$8.9M","tag-invest"), TAG("Sports","tag-sport")] },
-      { title: "PACCAR Center for Applied Science", sub: "$7M engineering building — expands applied science and engineering capacity, laying groundwork for the technical workforce pipeline into Spokane employers like Avista and Schweitzer Engineering.", tags: [TAG("$7M","tag-invest"), TAG("Academic","tag-academic")] },
+      { title: "Patterson Baseball Complex", invest: "$8.9M", sub: "Gonzaga athletics expand beyond basketball, diversifying campus investment.", tags: [TAG("$8.9M","tag-invest"), TAG("Sports","tag-sport")] },
+      { title: "PACCAR Center for Applied Science", invest: "$7M", sub: "Expands applied science and engineering capacity, laying groundwork for the technical workforce pipeline into Spokane employers like Avista and Schweitzer Engineering.", tags: [TAG("$7M","tag-invest"), TAG("Academic","tag-academic")] },
     ],
     sp: [
       { title: "Kendall Yards Planning Begins", sub: "Early discussions for redeveloping the Kendall Yards site — a 78-acre brownfield adjacent to campus. Gonzaga's growth makes nearby development viable.", tags: [TAG("Urban Dev","tag-city")] },
@@ -1133,8 +1151,8 @@ const EVENTS = {
   },
   2009: {
     gu: [
-      { title: "Coughlin Hall", sub: "$16.3M residence hall — further expands on-campus housing capacity to meet enrollment demand.", tags: [TAG("$16.3M","tag-invest"), TAG("Housing","tag-invest")] },
-      { title: "Kennedy Apartments — Phase 2", sub: "$14M expansion of student housing. Combined with Phase 1, Gonzaga now houses 440+ students in purpose-built apartments adjacent to campus.", tags: [TAG("$14M","tag-invest"), TAG("Housing","tag-invest")] },
+      { title: "Coughlin Hall", invest: "$16.3M", sub: "New residence hall — expands on-campus housing capacity to meet enrollment demand.", tags: [TAG("$16.3M","tag-invest"), TAG("Housing","tag-invest")] },
+      { title: "Kennedy Apartments — Phase 2", invest: "$14M", sub: "Expansion of student housing. Combined with Phase 1, Gonzaga now houses 440+ students in purpose-built apartments adjacent to campus.", tags: [TAG("$14M","tag-invest"), TAG("Housing","tag-invest")] },
     ],
     sp: [
       { title: "Downtown Hospitality Expansion", sub: "Riverfront redevelopment planning gains momentum. Early downtown hospitality investment follows growing sports tourism and visiting family traffic.", tags: [TAG("Urban Dev","tag-city")] },
@@ -1167,7 +1185,7 @@ const EVENTS = {
   },
   2013: {
     gu: [
-      { title: "Hemmingson Center Approved", sub: "$64M student union project — the largest single capital project in Gonzaga history at the time. Multi-year construction begins. Transforms the heart of campus.", tags: [TAG("$64M","tag-invest")] },
+      { title: "Hemmingson Center Approved", invest: "$64M", sub: "Student union project — the largest single capital project in Gonzaga history at the time. Multi-year construction begins. Transforms the heart of campus.", tags: [TAG("$64M","tag-invest")] },
       { title: "BARC Retail Center Opens", sub: "$14.7M mixed-use development — 650 parking spaces + retail anchoring the north end of campus. Gonzaga now operating as a real estate and urban development anchor in the neighborhood.", tags: [TAG("$14.7M","tag-invest")] },
     ],
     sp: [
@@ -1176,7 +1194,7 @@ const EVENTS = {
   },
   2014: {
     gu: [
-      { title: "Hemmingson Center Under Construction", sub: "Largest construction project on campus — $64M student union reshaping the heart of campus.", tags: [TAG("$64M","tag-invest")] },
+      { title: "Hemmingson Center Under Construction", invest: "$64M", sub: "Largest construction project on campus — student union reshaping the heart of campus.", tags: [TAG("$64M","tag-invest")] },
     ],
     sp: [
       { title: "$64M Riverfront Park Redevelopment Bond", sub: "Spokane voters approve $64M bond to overhaul Riverfront Park — the city's most significant infrastructure investment in decades. Mirrors Gonzaga's scale of ambition.", tags: [TAG("$64M","tag-infra"), TAG("Milestone","tag-city")] },
@@ -1184,7 +1202,7 @@ const EVENTS = {
   },
   2015: {
     gu: [
-      { title: "Hemmingson Center Opens", sub: "New campus hub — student dining, event space, student services. Becomes the social and civic center of campus life.", tags: [TAG("$64M","tag-invest"), TAG("Milestone","tag-academic")] },
+      { title: "Hemmingson Center Opens", invest: "$64M", sub: "New campus hub — student dining, event space, student services. Becomes the social and civic center of campus life.", tags: [TAG("$64M","tag-invest"), TAG("Milestone","tag-academic")] },
     ],
     sp: [
       { title: "Riverfront Redevelopment Begins", sub: "Construction starts on Riverfront Park overhaul. The $64M project runs 2015–2021, transforming Spokane's downtown park and public identity.", tags: [TAG("$64M","tag-infra")] },
@@ -1220,7 +1238,7 @@ const EVENTS = {
   2019: {
     gu: [
       { title: "Graduate Salary: $63,853 | Success: 95.5%", sub: "Gonzaga graduates consistently among top earners from regional universities. Spokane remains the #1 graduate destination city.", tags: [TAG("Outcome 95.5%","tag-enroll")] },
-      { title: "Myrtle Woldson Performing Arts Center Opens", sub: "$48.7M world-class performing arts venue — 762-seat concert hall, recital hall, and rehearsal spaces. Gonzaga's single largest cultural investment, anchoring the University District arts corridor.", tags: [TAG("$48.7M","tag-invest"), TAG("Culture","tag-partner")] },
+      { title: "Myrtle Woldson Performing Arts Center Opens", invest: "$48.7M", sub: "762-seat concert hall, recital hall, and rehearsal spaces. Gonzaga's largest cultural investment, anchoring the University District arts corridor.", tags: [TAG("$48.7M","tag-invest"), TAG("Culture","tag-partner")] },
     ],
     sp: [
       { title: "Pre-Pandemic Peak", sub: "Spokane's downtown economy at a multi-decade high. Sports events, conventions, and university activity driving hospitality revenue.", tags: [TAG("Economy","tag-city")] },
@@ -1236,7 +1254,7 @@ const EVENTS = {
   },
   2021: {
     gu: [
-      { title: "Bollier Center for Integrated Science & Engineering", sub: "82,000 sq ft — $48.4M facility for engineering, computer science, and applied sciences. Gonzaga's largest academic building (FY2018–2022). Directly expands the talent pipeline into Spokane's growing tech and engineering employers.", tags: [TAG("$48.4M","tag-invest"), TAG("Milestone","tag-academic")] },
+      { title: "Bollier Center for Integrated Science & Engineering", invest: "$48.4M", sub: "82,000 sq ft facility for engineering, computer science, and applied sciences. Gonzaga's largest academic building (FY2018–2022). Directly expands the talent pipeline into Spokane's growing tech and engineering employers.", tags: [TAG("$48.4M","tag-invest"), TAG("Milestone","tag-academic")] },
       { title: "Outcomes Rebound: 96.2% Success Rate", sub: "Strongest outcome year on record. Healthcare and technology sectors driving graduate placement. Salary: $63,459.", tags: [TAG("Outcome 96.2%","tag-enroll")] },
     ],
     sp: [
@@ -1265,7 +1283,7 @@ const EVENTS = {
     gu: [
       { title: "Current Enrollment: 7,470", sub: "Gonzaga now operates with a $250M+ operating budget, $148M+ endowment, 1,100+ employees, and a graduate talent pipeline feeding every major Spokane industry.", tags: [TAG("Enrollment","tag-enroll")] },
       { title: "Morris Family Indoor Training Facility", sub: "$13.4M indoor athletics training complex — expands varsity sports infrastructure, supporting Gonzaga's standing as a national-caliber athletics program and regional sports destination.", tags: [TAG("$13.4M","tag-invest"), TAG("Sports","tag-sport")] },
-      { title: "Mantua Hall — New Student Residence", sub: "$15.2M student housing project (FY2023–2025). Adds residential capacity as Gonzaga manages enrollment and campus living quality for the next generation of students.", tags: [TAG("$15.2M","tag-invest"), TAG("Housing","tag-invest")] },
+      { title: "Mantua Hall — New Student Residence", invest: "$15.2M", sub: "Student housing project (FY2023–2025). Adds residential capacity as Gonzaga manages enrollment and campus living quality for the next generation of students.", tags: [TAG("$15.2M","tag-invest"), TAG("Housing","tag-invest")] },
     ],
     sp: [
       { title: "Spokane Airport TREX Expansion", sub: "New gates and terminal expansion — Spokane International Airport grows to handle increased regional traffic, partly driven by Gonzaga family and alumni travel.", tags: [TAG("Infrastructure","tag-infra")] },
@@ -1364,6 +1382,7 @@ function renderEvents(containerId, events, side) {
           : `<div class="ev-photo-label">📷 ${ev.title} · ${activeYear}</div>`}
       </div>
       <div class="ev-title">${ev.title}</div>
+      ${ev.invest ? `<div class="ev-invest">${ev.invest}<span class="ev-invest-label">campus investment</span></div>` : ''}
       <div class="ev-sub">${ev.sub}</div>
       <div>${(ev.tags || []).join(' ')}</div>
     </div>
