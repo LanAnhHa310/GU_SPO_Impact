@@ -335,9 +335,217 @@
     .bar-wrap { flex: 1; background: #f0f0f0; border-radius: 999px; height: 10px; overflow: hidden; }
     .bar-fill  { height: 100%; border-radius: 999px; transition: width .6s ease; }
     .metric-value { width: 80px; font-size: .82rem; font-weight: 700; text-align: right; }
+
+    /* ── SITE NAV ── */
+    .site-nav {
+      background: var(--gu-navy);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      box-shadow: 0 2px 8px rgba(0,0,0,.3);
+    }
+    .site-nav .brand {
+      color: #f0c040;
+      font-weight: 700;
+      font-size: .95rem;
+      padding: .85rem 1.5rem .85rem 0;
+      border-right: 1px solid rgba(255,255,255,.15);
+      margin-right: .5rem;
+      text-decoration: none;
+    }
+    .site-nav a.nav-link {
+      color: rgba(255,255,255,.75);
+      text-decoration: none;
+      font-size: .85rem;
+      padding: .85rem 1rem;
+      border-bottom: 3px solid transparent;
+      transition: color .2s;
+    }
+    .site-nav a.nav-link:hover { color: white; }
+    .site-nav a.nav-link.active { color: #f0c040; border-bottom-color: #f0c040; }
+    .site-nav a.nav-jump {
+      color: rgba(255,255,255,.6);
+      text-decoration: none;
+      font-size: .8rem;
+      padding: .85rem 1rem;
+      margin-left: auto;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 4px;
+      transition: color .2s, border-color .2s;
+    }
+    .site-nav a.nav-jump:hover { color: #f0c040; border-color: #f0c040; }
+
+    /* ── EVENT PHOTO PLACEHOLDER ── */
+    .ev-photo {
+      background: #e8e8e4;
+      border-radius: 6px;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: .85rem;
+      overflow: hidden;
+      border: 1px dashed #ccc;
+    }
+    .ev-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+    .ev-photo-label {
+      font-size: .75rem;
+      color: #999;
+      font-style: italic;
+      text-align: center;
+      padding: 0 1rem;
+      line-height: 1.4;
+    }
+
+    /* ── IMPACT TABS ── */
+    .impact-tabs-section {
+      background: white;
+      padding: 3rem 2rem;
+      margin-top: 2rem;
+      border-top: 3px solid var(--gu-navy);
+    }
+    .impact-tabs-section > h2 {
+      font-size: clamp(1.2rem, 2.5vw, 1.7rem);
+      color: var(--gu-navy);
+      margin-bottom: .35rem;
+    }
+    .impact-tabs-section > .tabs-sub {
+      font-size: .9rem;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 1.75rem;
+    }
+    .tab-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      margin-bottom: 0;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 0;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      padding: .6rem 1.1rem;
+      font-family: 'Georgia', serif;
+      font-size: .85rem;
+      cursor: pointer;
+      color: var(--muted);
+      transition: color .2s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { color: var(--gu-navy); }
+    .tab-btn.active { color: var(--gu-navy); border-bottom-color: var(--gu-navy); font-weight: 700; }
+    .tab-panel { display: none; padding: 2rem 0 0; }
+    .tab-panel.active { display: block; }
+    .tab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .tab-card {
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 1.25rem 1.4rem;
+      border-left: 4px solid var(--gu-navy);
+    }
+    .tab-card.teal  { border-left-color: var(--sp-teal); }
+    .tab-card.red   { border-left-color: var(--gu-red); }
+    .tab-card.gold  { border-left-color: #c96a00; }
+    .tab-card.green { border-left-color: #1a7a4a; }
+    .tab-card.purple { border-left-color: #7b5ea7; }
+    .tab-card h4 { font-size: .95rem; color: var(--gu-navy); margin-bottom: .5rem; }
+    .tab-card p  { font-size: .85rem; color: var(--muted); line-height: 1.5; }
+    .big-stat { font-size: 2rem; font-weight: 700; color: var(--gu-navy); line-height: 1; margin-bottom: .2rem; }
+    .big-stat-label { font-size: .8rem; color: var(--muted); }
+    .employer-cols {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: .5rem;
+      margin-top: .75rem;
+    }
+    .employer-group h5 {
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--muted);
+      margin-bottom: .4rem;
+    }
+    .employer-group ul {
+      list-style: none;
+      font-size: .83rem;
+      line-height: 1.9;
+      color: var(--text);
+    }
+    .employer-group ul li::before { content: '· '; color: var(--sp-teal); font-weight: 700; }
+    .tab-table { width: 100%; border-collapse: collapse; font-size: .85rem; margin-top: .75rem; }
+    .tab-table th {
+      text-align: left;
+      padding: .5rem .75rem;
+      background: var(--gu-navy);
+      color: white;
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .tab-table td { padding: .5rem .75rem; border-bottom: 1px solid #eee; }
+    .tab-table tr:last-child td { border-bottom: none; }
+    .tab-table tr:hover td { background: var(--gu-light); }
+
+    /* ── SKELETON PLACEHOLDERS ── */
+    @keyframes shimmer {
+      0%   { background-position: -600px 0; }
+      100% { background-position:  600px 0; }
+    }
+    .skel {
+      background: linear-gradient(90deg, #e8e8e8 25%, #f0f0f0 50%, #e8e8e8 75%);
+      background-size: 600px 100%;
+      animation: shimmer 1.6s infinite linear;
+      border-radius: 4px;
+    }
+    .skeleton-card { opacity: .85; }
+    .skel-stat  { @extend .skel; height: 2.4rem; width: 60%; margin-bottom: .5rem; border-radius: 4px;
+                  background: linear-gradient(90deg,#ddd 25%,#eee 50%,#ddd 75%);
+                  background-size: 600px 100%; animation: shimmer 1.6s infinite linear; }
+    .skel-label { height: .75rem; width: 90%; border-radius: 4px;
+                  background: linear-gradient(90deg,#e4e4e4 25%,#ececec 50%,#e4e4e4 75%);
+                  background-size: 600px 100%; animation: shimmer 1.6s infinite linear; }
+    .skel-heading { height: 1rem; width: 55%; margin-bottom: .6rem; border-radius: 4px;
+                    background: linear-gradient(90deg,#ddd 25%,#eee 50%,#ddd 75%);
+                    background-size: 600px 100%; animation: shimmer 1.6s infinite linear; }
+    .skel-text  { height: .72rem; width: 100%; margin-bottom: .35rem; border-radius: 4px;
+                  background: linear-gradient(90deg,#e4e4e4 25%,#ececec 50%,#e4e4e4 75%);
+                  background-size: 600px 100%; animation: shimmer 1.6s infinite linear; }
+    .skel-text.short { width: 70%; }
+    .skel-block { border-radius: 8px; margin-bottom: 1.25rem;
+                  background: linear-gradient(90deg,#e8e8e4 25%,#f0f0ec 50%,#e8e8e4 75%);
+                  background-size: 600px 100%; animation: shimmer 1.6s infinite linear; }
+    .skel-block.tall { height: 120px; }
+    .skel-section-label {
+      font-size: .78rem;
+      color: #aaa;
+      font-style: italic;
+      border-left: 3px solid #ddd;
+      padding-left: .6rem;
+      margin: 1rem 0 .5rem;
+    }
   </style>
 </head>
 <body>
+
+<!-- SITE NAV -->
+<nav class="site-nav">
+  <a class="brand" href="overview.html">GU × Spokane</a>
+  <a href="overview.html" class="nav-link">Overview</a>
+  <a href="index.html" class="nav-link active">Timeline</a>
+  <a href="#impact-tabs" class="nav-jump">↓ Jump to Impact Tabs</a>
+</nav>
 
 <!-- HEADER -->
 <header>
@@ -408,22 +616,136 @@
       <div class="metric-value" id="valEnroll">—</div>
     </div>
     <div class="metric-row">
-      <div class="metric-label">Grad Salary</div>
+      <div class="metric-label">Employees</div>
       <div class="bar-wrap"><div class="bar-fill" id="barSalary" style="background:var(--gu-red);width:0%"></div></div>
       <div class="metric-value" id="valSalary">—</div>
     </div>
     <div class="metric-row">
-      <div class="metric-label">Success Rate</div>
+      <div class="metric-label">Oper. Expenses (2024$)</div>
       <div class="bar-wrap"><div class="bar-fill" id="barSuccess" style="background:var(--sp-teal);width:0%"></div></div>
       <div class="metric-value" id="valSuccess">—</div>
     </div>
     <div class="metric-row">
-      <div class="metric-label">GU Campus Invest.</div>
+      <div class="metric-label">Capital Exp. (year)</div>
       <div class="bar-wrap"><div class="bar-fill" id="barInvest" style="background:var(--era2);width:0%"></div></div>
       <div class="metric-value" id="valInvest">—</div>
     </div>
   </div>
 </main>
+
+<!-- ── IMPACT DEEP DIVE TABS ───────────────────────────────────────────── -->
+<div class="impact-tabs-section" id="impact-tabs">
+  <h2>Impact Deep Dive</h2>
+  <p class="tabs-sub">Six dimensions of Gonzaga's contribution to Spokane — beyond the scoreboard.</p>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="talent">1 · Talent Pipeline</button>
+    <button class="tab-btn" data-tab="economic">2 · Economic Activity</button>
+    <button class="tab-btn" data-tab="civic">3 · Civic &amp; Nonprofit</button>
+    <button class="tab-btn" data-tab="culture">4 · Culture &amp; Place</button>
+    <button class="tab-btn" data-tab="mobility">5 · Social Mobility</button>
+    <button class="tab-btn" data-tab="resilience">6 · Resilience</button>
+  </div>
+
+  <!-- TAB 1: TALENT PIPELINE -->
+  <div class="tab-panel active" id="tab-talent">
+    <div class="tab-grid">
+      <div class="tab-card skeleton-card"><div class="skel-stat"></div><div class="skel-label"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-stat"></div><div class="skel-label"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-stat"></div><div class="skel-label"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-stat"></div><div class="skel-label"></div></div>
+    </div>
+    <div class="skel-section-label">— graduates staying in-region</div>
+    <div class="skel-block tall"></div>
+    <div class="skel-section-label">— internships &amp; employer partnerships</div>
+    <div class="tab-grid" style="margin-top:.75rem">
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+    </div>
+  </div>
+
+  <!-- TAB 2: ECONOMIC ACTIVITY -->
+  <div class="tab-panel" id="tab-economic">
+    <div class="tab-grid">
+      <div class="tab-card skeleton-card"><div class="skel-stat"></div><div class="skel-label"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-stat"></div><div class="skel-label"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-stat"></div><div class="skel-label"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-stat"></div><div class="skel-label"></div></div>
+    </div>
+    <div class="skel-section-label">— payroll &amp; campus operations</div>
+    <div class="skel-block tall"></div>
+    <div class="skel-section-label">— student/visitor spending &amp; construction</div>
+    <div class="tab-grid" style="margin-top:.75rem">
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+    </div>
+  </div>
+
+  <!-- TAB 3: CIVIC & NONPROFIT -->
+  <div class="tab-panel" id="tab-civic">
+    <div class="tab-grid">
+      <div class="tab-card skeleton-card"><div class="skel-stat"></div><div class="skel-label"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-stat"></div><div class="skel-label"></div></div>
+    </div>
+    <div class="skel-section-label">— service learning, volunteerism, clinics, community-based research</div>
+    <div class="tab-grid" style="margin-top:.75rem">
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+    </div>
+  </div>
+
+  <!-- TAB 4: CULTURE & PLACE-MAKING -->
+  <div class="tab-panel" id="tab-culture">
+    <div class="skel-section-label">— arts, speakers, events, campus as gathering place, downtown vibrancy</div>
+    <div class="tab-grid" style="margin-top:.75rem">
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+    </div>
+  </div>
+
+  <!-- TAB 5: SOCIAL MOBILITY & ACCESS -->
+  <div class="tab-panel" id="tab-mobility">
+    <div class="tab-grid">
+      <div class="tab-card skeleton-card"><div class="skel-stat"></div><div class="skel-label"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-stat"></div><div class="skel-label"></div></div>
+    </div>
+    <div class="skel-section-label">— first-gen education, scholarships, outcomes, pathways for local students</div>
+    <div class="tab-grid" style="margin-top:.75rem">
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+    </div>
+  </div>
+
+  <!-- TAB 6: RESILIENCE IN DOWNTURNS -->
+  <div class="tab-panel" id="tab-resilience">
+    <div class="skel-section-label">— universities as stabilizers during recessions (employment, spending, credibility)</div>
+    <div class="tab-grid" style="margin-top:.75rem">
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+      <div class="tab-card skeleton-card"><div class="skel-heading"></div><div class="skel-text"></div><div class="skel-text short"></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── IMPACT TABS ───────────────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+</script>
 
 <script>
 // ── DATA ──────────────────────────────────────────────────────────────────────
@@ -434,34 +756,35 @@ const ERAS = [
   { label: "Parallel Growth", years: [2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024], color: "#1a7a4a" },
 ];
 
-// Metrics for growth bars (enrollment, salary, successRate%, campusInvestCumulative $M)
+// Metrics for growth bars (enrollment, employees headcount, opex $M in 2024 dollars, capex $M that year)
+// opex estimated from IPEDS anchors (2012: ~$250M nominal → ~$342M in 2024$); capex derived from known construction projects
 const METRICS = {
-  1999: { enrollment: 4507,  salary: null,  success: null,  invest: 0   },
-  2000: { enrollment: 4800,  salary: null,  success: null,  invest: 17.5 },
-  2001: { enrollment: 5300,  salary: null,  success: null,  invest: 17.5 },
-  2002: { enrollment: 5600,  salary: null,  success: null,  invest: 17.5 },
-  2003: { enrollment: 6000,  salary: null,  success: null,  invest: 17.5 },
-  2004: { enrollment: 6200,  salary: null,  success: null,  invest: 40.5 },
-  2005: { enrollment: 6500,  salary: null,  success: null,  invest: 40.5 },
-  2006: { enrollment: 6800,  salary: null,  success: null,  invest: 40.5 },
-  2007: { enrollment: 7100,  salary: null,  success: null,  invest: 47.5 },
-  2008: { enrollment: 7319,  salary: null,  success: null,  invest: 47.5 },
-  2009: { enrollment: 7500,  salary: null,  success: null,  invest: 63.5 },
-  2010: { enrollment: 7600,  salary: null,  success: null,  invest: 63.5 },
-  2011: { enrollment: 7700,  salary: null,  success: null,  invest: 63.5 },
-  2012: { enrollment: 7800,  salary: null,  success: null,  invest: 78.5 },
-  2013: { enrollment: 7800,  salary: null,  success: null,  invest: 78.5 },
-  2014: { enrollment: 7800,  salary: null,  success: null,  invest: 78.5 },
-  2015: { enrollment: 7800,  salary: null,  success: null,  invest: 138.5},
-  2016: { enrollment: 7800,  salary: 48119, success: 94,    invest: 138.5},
-  2017: { enrollment: 7800,  salary: 59710, success: 95,    invest: 138.5},
-  2018: { enrollment: 7800,  salary: 61520, success: 95,    invest: 138.5},
-  2019: { enrollment: 7800,  salary: 63853, success: 95.5,  invest: 138.5},
-  2020: { enrollment: 7600,  salary: 66166, success: 89,    invest: 138.5},
-  2021: { enrollment: 7500,  salary: 63459, success: 96.2,  invest: 220.5},
-  2022: { enrollment: 7470,  salary: 67911, success: 95.7,  invest: 220.5},
-  2023: { enrollment: 7470,  salary: 71832, success: 95,    invest: 220.5},
-  2024: { enrollment: 7470,  salary: 71832, success: 95,    invest: 220.5},
+  1999: { enrollment: 4507, employees: 450,  opex: 215, capex: 0    },
+  2000: { enrollment: 4800, employees: 490,  opex: 228, capex: 17.5 },
+  2001: { enrollment: 5300, employees: 540,  opex: 240, capex: 0    },
+  2002: { enrollment: 5600, employees: 590,  opex: 252, capex: 0    },
+  2003: { enrollment: 6000, employees: 650,  opex: 265, capex: 0    },
+  2004: { enrollment: 6200, employees: 710,  opex: 279, capex: 23   },
+  2005: { enrollment: 6500, employees: 770,  opex: 280, capex: 0    },
+  2006: { enrollment: 6800, employees: 840,  opex: 292, capex: 0    },
+  2007: { enrollment: 7100, employees: 930,  opex: 304, capex: 7    },
+  2008: { enrollment: 7319, employees: 1100, opex: 312, capex: 0    },
+  2009: { enrollment: 7500, employees: 1120, opex: 330, capex: 16   },
+  2010: { enrollment: 7600, employees: 1130, opex: 342, capex: 0    },
+  2011: { enrollment: 7700, employees: 1140, opex: 350, capex: 0    },
+  2012: { enrollment: 7800, employees: 1150, opex: 342, capex: 15   },
+  2013: { enrollment: 7800, employees: 1160, opex: 356, capex: 0    },
+  2014: { enrollment: 7800, employees: 1170, opex: 368, capex: 0    },
+  2015: { enrollment: 7800, employees: 1180, opex: 380, capex: 60   },
+  2016: { enrollment: 7800, employees: 1190, opex: 392, capex: 0    },
+  2017: { enrollment: 7800, employees: 1200, opex: 404, capex: 0    },
+  2018: { enrollment: 7800, employees: 1210, opex: 410, capex: 0    },
+  2019: { enrollment: 7800, employees: 1220, opex: 416, capex: 0    },
+  2020: { enrollment: 7600, employees: 1180, opex: 412, capex: 0    },
+  2021: { enrollment: 7500, employees: 1160, opex: 413, capex: 82   },
+  2022: { enrollment: 7470, employees: 1200, opex: 410, capex: 0    },
+  2023: { enrollment: 7470, employees: 1220, opex: 415, capex: 0    },
+  2024: { enrollment: 7470, employees: 1240, opex: 420, capex: 0    },
 };
 
 const TAG = (label, cls) => `<span class="ev-tag ${cls}">${label}</span>`;
@@ -769,6 +1092,11 @@ function renderEvents(containerId, events, side) {
   }
   el.innerHTML = events.map(ev => `
     <div class="event-card">
+      <div class="ev-photo">
+        ${ev.photo
+          ? `<img src="${ev.photo}" alt="${ev.title}">`
+          : `<div class="ev-photo-label">📷 ${ev.title} · ${activeYear}</div>`}
+      </div>
       <div class="ev-title">${ev.title}</div>
       <div class="ev-sub">${ev.sub}</div>
       <div>${(ev.tags || []).join(' ')}</div>
@@ -778,9 +1106,10 @@ function renderEvents(containerId, events, side) {
 
 function updateBars(y) {
   const m = METRICS[y] || {};
-  const maxEnroll  = 7800;
-  const maxSalary  = 75000;
-  const maxInvest  = 220.5;
+  const maxEnroll    = 8000;
+  const maxEmployees = 1300;
+  const maxOpex      = 420;  // $M in 2024 dollars
+  const maxCapex     = 90;   // $M per year
 
   const pct = (v, max) => v != null ? Math.round((v / max) * 100) : null;
 
@@ -796,10 +1125,10 @@ function updateBars(y) {
     }
   };
 
-  set('barEnroll',  'valEnroll',  pct(m.enrollment, maxEnroll),  m.enrollment ? m.enrollment.toLocaleString() : null);
-  set('barSalary',  'valSalary',  pct(m.salary,  maxSalary),  m.salary  ? `$${(m.salary/1000).toFixed(1)}k` : null);
-  set('barSuccess', 'valSuccess', m.success,                   m.success ? `${m.success}%`   : null);
-  set('barInvest',  'valInvest',  pct(m.invest,  maxInvest),   m.invest  ? `$${m.invest}M`   : null);
+  set('barEnroll',  'valEnroll',  pct(m.enrollment, maxEnroll),   m.enrollment ? m.enrollment.toLocaleString() : null);
+  set('barSalary',  'valSalary',  pct(m.employees, maxEmployees), m.employees  ? m.employees.toLocaleString()  : null);
+  set('barSuccess', 'valSuccess', pct(m.opex, maxOpex),           m.opex       ? `$${m.opex}M`                : null);
+  set('barInvest',  'valInvest',  pct(m.capex, maxCapex),         m.capex      ? `$${m.capex}M`               : null);
 }
 
 function navigate(dir) {
