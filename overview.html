@@ -187,7 +187,7 @@
   <p class="sub">A quarter century of parallel growth — beyond basketball</p>
   <div class="stat-pills">
     <div class="pill">GU enrollment <strong>+84%</strong> since 1997</div>
-    <div class="pill">Spokane per capita income <strong>+123%</strong> since 2000</div>
+    <div class="pill">Spokane per capita income <strong>+132%</strong> since 2000</div>
     <div class="pill"><strong>317</strong> graduates → Spokane in 2023 (#1 city)</div>
     <div class="pill"><strong>$547M+</strong> campus investment since 2000</div>
     <div class="pill">Top 5 non-gov employer in Spokane County by <strong>2008</strong></div>
@@ -203,7 +203,7 @@
       <canvas id="growthChart"></canvas>
     </div>
     <p class="chart-note">
-      Sources: IPEDS (GU enrollment). Spokane MSA per capita personal income: BEA Regional Data Table CA1 (approximate — verify with exact BEA pull at apps.bea.gov).
+      Sources: IPEDS (GU enrollment). Spokane County per capita personal income: FRED series PCPI53063 (BEA Regional Data).
       Note: 2020–21 income spike reflects COVID-era federal transfer payments, not sustained regional wage growth.
     </p>
   </div>
@@ -243,7 +243,7 @@
       <div class="ba-sep">Spokane</div>
       <div class="ba-stat">
         <div class="lbl">Per Capita Income</div>
-        <div class="val">$27,800</div>
+        <div class="val">$26,646</div>
       </div>
       <div class="ba-stat">
         <div class="lbl">Downtown</div>
@@ -284,8 +284,8 @@
       <div class="ba-sep">Spokane</div>
       <div class="ba-stat">
         <div class="lbl">Per Capita Income</div>
-        <div class="val hi">~$62,000</div>
-        <div class="chg">+123% since 2000</div>
+        <div class="val hi">$61,810</div>
+        <div class="chg">+132% since 2000</div>
       </div>
       <div class="ba-stat">
         <div class="lbl">Downtown</div>
@@ -349,12 +349,34 @@ const GU_ENROLLMENT = [
   7800,7600,7500,7470,7470,7470
 ];
 
-// BEA Spokane MSA per capita personal income (approximate — replace with exact BEA CA1 pull)
+// Spokane County per capita personal income — FRED series PCPI53063 (exact BEA values)
 const SPOKANE_PCI = [
-  null,  // 1999 — not included in chart
-  27800,28100,28450,29200,30150,31900,33600,35500,36800,
-  35200,36100,37400,38100,38800,40200,41100,42400,44100,46100,
-  48300,52000,56700,57800,60100,61800
+  24877, // 1999
+  26646, // 2000
+  26535, // 2001
+  26930, // 2002
+  27706, // 2003
+  28769, // 2004
+  29555, // 2005
+  31317, // 2006
+  33285, // 2007
+  35156, // 2008
+  34176, // 2009
+  34664, // 2010
+  35865, // 2011
+  36957, // 2012
+  36965, // 2013
+  38454, // 2014
+  39742, // 2015
+  40754, // 2016
+  42202, // 2017
+  44085, // 2018
+  45639, // 2019
+  49199, // 2020
+  54402, // 2021
+  55498, // 2022
+  58920, // 2023
+  61810, // 2024
 ];
 
 // ── CHART 1: DUAL-AXIS LINE CHART ─────────────────────────────────────────
