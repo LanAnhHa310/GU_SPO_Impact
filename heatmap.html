@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gonzaga University — Student Geographic Origins</title>
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gu-navy: #002868;
+      --gu-red:  #CE1126;
+      --gold:    #f0c040;
+      --bg:      #f5f5f0;
+      --muted:   #666;
+    }
+    body { font-family: 'Georgia', serif; background: var(--bg); color: #1a1a1a; }
+
+    .site-nav {
+      background: var(--gu-navy);
+      display: flex; align-items: center;
+      padding: 0 2rem;
+      position: sticky; top: 0; z-index: 200;
+      box-shadow: 0 2px 8px rgba(0,0,0,.3);
+    }
+    .site-nav .brand {
+      color: var(--gold); font-weight: 700; font-size: .95rem;
+      padding: .85rem 1.5rem .85rem 0;
+      border-right: 1px solid rgba(255,255,255,.15);
+      margin-right: .5rem; text-decoration: none; white-space: nowrap;
+    }
+    .site-nav a.nav-link {
+      color: rgba(255,255,255,.75); text-decoration: none;
+      font-size: .85rem; padding: .85rem 1rem;
+      border-bottom: 3px solid transparent; transition: color .2s; white-space: nowrap;
+    }
+    .site-nav a.nav-link:hover { color: white; }
+    .site-nav a.nav-link.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    header {
+      background: linear-gradient(135deg, var(--gu-navy) 0%, #001a4d 100%);
+      color: white; padding: 2.5rem 2rem 2rem; text-align: center;
+    }
+    header h1 { font-size: clamp(1.4rem, 3vw, 2.2rem); font-weight: 700; margin-bottom: .4rem; }
+    header h1 span { color: var(--gold); }
+    header p { font-size: .95rem; color: rgba(255,255,255,.7); font-style: italic; }
+
+    .controls {
+      display: flex; justify-content: center; align-items: center;
+      gap: 1rem; padding: 1.5rem 2rem 0; flex-wrap: wrap;
+    }
+    .toggle-group {
+      display: flex; border: 2px solid var(--gu-navy); border-radius: 6px; overflow: hidden;
+    }
+    .toggle-btn {
+      padding: .45rem 1.2rem; border: none; cursor: pointer;
+      font-family: 'Georgia', serif; font-size: .85rem;
+      background: white; color: var(--gu-navy); transition: all .2s;
+    }
+    .toggle-btn.active { background: var(--gu-navy); color: white; font-weight: 700; }
+    .ctrl-label { font-size: .85rem; color: var(--muted); font-style: italic; }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      padding: 1rem 1.5rem 0;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    @media (max-width: 800px) { .map-grid { grid-template-columns: 1fr; } }
+
+    .map-panel { background: white; border-radius: 10px; padding: .75rem; box-shadow: 0 2px 12px rgba(0,0,0,.08); }
+    .map-title {
+      text-align: center; font-size: 1rem; font-weight: 700;
+      color: var(--gu-navy); margin-bottom: .25rem;
+    }
+    .map-subtitle { text-align: center; font-size: .78rem; color: var(--muted); margin-bottom: .5rem; }
+    .map-plot { height: 420px; }
+
+    .insight-bar {
+      max-width: 1400px; margin: 1.25rem auto 0;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: .75rem;
+    }
+    .insight-card {
+      background: white; border-radius: 8px; padding: 1rem 1.2rem;
+      border-left: 4px solid var(--gu-navy);
+      box-shadow: 0 1px 6px rgba(0,0,0,.06);
+    }
+    .insight-card.teal { border-left-color: #0d6b6e; }
+    .insight-card.gold { border-left-color: #c96a00; }
+    .insight-card.green { border-left-color: #1a7a4a; }
+    .ins-stat { font-size: 1.6rem; font-weight: 700; color: var(--gu-navy); line-height: 1; }
+    .ins-label { font-size: .78rem; color: var(--muted); margin-top: .2rem; line-height: 1.4; }
+
+    .state-table-wrap {
+      max-width: 1400px; margin: 1.25rem auto 2rem;
+      padding: 0 1.5rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    }
+    @media (max-width: 800px) { .state-table-wrap { grid-template-columns: 1fr; } }
+    .state-table-panel { background: white; border-radius: 10px; padding: 1rem 1.25rem; box-shadow: 0 2px 12px rgba(0,0,0,.08); }
+    .state-table-panel h3 { font-size: .95rem; color: var(--gu-navy); margin-bottom: .75rem; }
+    table { width: 100%; border-collapse: collapse; font-size: .83rem; }
+    th { text-align: left; padding: .4rem .6rem; background: var(--gu-navy); color: white; font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; }
+    td { padding: .4rem .6rem; border-bottom: 1px solid #eee; }
+    tr:last-child td { border: none; }
+    tr:hover td { background: #f0f4f8; }
+    .bar-cell { display: flex; align-items: center; gap: .4rem; }
+    .mini-bar { height: 8px; border-radius: 4px; background: var(--gu-navy); min-width: 2px; }
+    .note { font-size: .75rem; color: var(--muted); font-style: italic; padding: 1rem 1.5rem 0; max-width: 1400px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="overview.html" class="brand">GU &amp; Spokane</a>
+  <a href="overview.html" class="nav-link">Overview</a>
+  <a href="index.html" class="nav-link">Impact Deep Dive</a>
+  <a href="heatmap.html" class="nav-link active">Student Origins</a>
+</nav>
+
+<header>
+  <h1>Where Gonzaga Students Come From — <span>1997 vs. 2025</span></h1>
+  <p>From a regional draw to a national importer of talent: Fall 1997 and Fall 2025 first-year undergraduate enrollment by state</p>
+</header>
+
+<div class="controls">
+  <span class="ctrl-label">Show:</span>
+  <div class="toggle-group">
+    <button class="toggle-btn active" id="btnEnrolled" onclick="setMetric('enrolled')">Confirmed / Enrolled</button>
+    <button class="toggle-btn" id="btnAdmitted" onclick="setMetric('admitted')">Admitted</button>
+  </div>
+</div>
+
+<div class="map-grid">
+  <div class="map-panel">
+    <div class="map-title">Fall 1997</div>
+    <div class="map-subtitle" id="sub97">494 enrolled · 43 states represented</div>
+    <div class="map-plot" id="map97"></div>
+  </div>
+  <div class="map-panel">
+    <div class="map-title">Fall 2025</div>
+    <div class="map-subtitle" id="sub25">1,118 enrolled · 51 states/territories represented</div>
+    <div class="map-plot" id="map25"></div>
+  </div>
+</div>
+
+<div class="insight-bar">
+  <div class="insight-card">
+    <div class="ins-stat">+126%</div>
+    <div class="ins-label">growth in enrolled first-year students, 1997 → 2025</div>
+  </div>
+  <div class="insight-card teal">
+    <div class="ins-stat">43 → 51</div>
+    <div class="ins-label">states &amp; territories represented (enrolled students)</div>
+  </div>
+  <div class="insight-card gold">
+    <div class="ins-stat">CA: 46→159</div>
+    <div class="ins-label">California enrolled students — the single largest non-WA growth market</div>
+  </div>
+  <div class="insight-card green">
+    <div class="ins-stat">WA share: 43%→55%</div>
+    <div class="ins-label">Washington State remained the #1 source, but national reach expanded dramatically</div>
+  </div>
+</div>
+
+<div class="state-table-wrap">
+  <div class="state-table-panel">
+    <h3>Fall 1997 — Enrolled by State (top 15)</h3>
+    <table id="tbl97"></table>
+  </div>
+  <div class="state-table-panel">
+    <h3>Fall 2025 — Enrolled by State (top 15)</h3>
+    <table id="tbl25"></table>
+  </div>
+</div>
+
+<p class="note">
+  Source: Gonzaga University Undergraduate Geographic Locations data (20260303 Economic Impact Study). Cleaned: removed rows with blank/unknown state, international addresses, Canadian provinces, and military overseas APO/FPO entries (37 rows dropped). City abbreviations standardized. No duplicate state-year combinations.
+</p>
+
+<script>
+// ── DATA (cleaned from IPEDS CSV) ─────────────────────────────────────────
+const DATA = {
+  s97: ["AK","AZ","CA","CO","CT","DC","FL","GA","GU","HI","IA","ID","IL","IN","KS","LA","MA","MD","ME","MI","MN","MO","MP","MT","NC","NE","NJ","NM","NV","NY","OH","OK","OR","RI","SC","SD","TX","UT","VA","VT","WA","WI","WY"],
+  e97: [11,9,46,17,2,0,4,1,0,6,0,32,4,0,1,1,3,2,0,1,14,2,0,27,6,2,0,1,11,2,1,1,54,0,2,0,10,3,4,0,213,1,0],
+  a97: [35,21,161,56,2,1,4,1,4,39,1,111,6,3,2,1,3,2,0,2,24,5,0,98,7,9,1,10,27,4,5,1,153,0,2,3,15,24,9,1,611,5,5],
+
+  s25: ["AK","AL","AR","AZ","CA","CO","CT","DC","FL","GA","GU","HI","IA","ID","IL","IN","KS","KY","LA","MA","MD","ME","MI","MN","MO","MP","MT","NC","ND","NE","NH","NJ","NM","NV","NY","OH","OK","OR","PA","PR","RI","SC","SD","TN","TX","UT","VA","VT","WA","WI","WY"],
+  e25: [15,1,0,15,159,32,2,0,4,3,0,22,0,30,11,0,0,0,0,2,0,0,0,8,1,0,16,0,1,2,0,1,2,9,0,0,4,121,1,0,0,3,0,0,17,12,3,1,611,7,2],
+  a25: [70,2,2,117,1812,349,17,2,23,15,8,121,8,117,82,14,6,5,6,24,16,5,15,122,14,1,96,15,1,26,4,15,23,91,33,12,10,679,13,1,5,7,4,10,148,58,15,7,2632,38,12],
+};
+
+let currentMetric = 'enrolled';
+
+const COLORSCALE = [
+  [0,    '#e8ecf5'],
+  [0.05, '#b8c8e8'],
+  [0.2,  '#6a93d4'],
+  [0.45, '#2d5ea8'],
+  [0.7,  '#002868'],
+  [1,    '#001040'],
+];
+
+function getVals(year, metric) {
+  if (year === 97)  return metric === 'enrolled' ? DATA.e97 : DATA.a97;
+  return metric === 'enrolled' ? DATA.e25 : DATA.a25;
+}
+function getStates(year) { return year === 97 ? DATA.s97 : DATA.s25; }
+
+function makeTrace(year, metric) {
+  const vals   = getVals(year, metric);
+  const states = getStates(year);
+  const total  = vals.reduce((a,b) => a+b, 0);
+  const label  = metric === 'enrolled' ? 'Enrolled' : 'Admitted';
+  return {
+    type: 'choropleth',
+    locationmode: 'USA-states',
+    locations: states,
+    z: vals,
+    text: states.map((s, i) => `${s}: ${vals[i].toLocaleString()} ${label.toLowerCase()}`),
+    hovertemplate: '<b>%{location}</b><br>' + label + ': %{z}<extra></extra>',
+    colorscale: COLORSCALE,
+    zmin: 0,
+    zmax: metric === 'enrolled' ? 620 : 2700,
+    showscale: year === 25,
+    colorbar: {
+      title: { text: label, font: { size: 11 } },
+      thickness: 12, len: 0.7, x: 1.01,
+    },
+    marker: { line: { color: 'white', width: 0.8 } },
+  };
+}
+
+const LAYOUT_BASE = {
+  geo: {
+    scope: 'usa',
+    showlakes: false,
+    showland: true,
+    landcolor: '#f0f0ec',
+    bgcolor: 'transparent',
+    projection: { type: 'albers usa' },
+  },
+  margin: { t: 0, b: 0, l: 0, r: 0 },
+  paper_bgcolor: 'transparent',
+  plot_bgcolor: 'transparent',
+};
+
+const CONFIG = { responsive: true, displayModeBar: false };
+
+function drawMaps(metric) {
+  Plotly.newPlot('map97', [makeTrace(97, metric)], { ...LAYOUT_BASE, geo: { ...LAYOUT_BASE.geo } }, CONFIG);
+  Plotly.newPlot('map25', [makeTrace(25, metric)], { ...LAYOUT_BASE, geo: { ...LAYOUT_BASE.geo } }, CONFIG);
+
+  const e97total = DATA.e97.reduce((a,b)=>a+b,0);
+  const e25total = DATA.e25.reduce((a,b)=>a+b,0);
+  const a97total = DATA.a97.reduce((a,b)=>a+b,0);
+  const a25total = DATA.a25.reduce((a,b)=>a+b,0);
+  const states97 = DATA.e97.filter(v=>v>0).length;
+  const states25 = DATA.e25.filter(v=>v>0).length;
+
+  if (metric === 'enrolled') {
+    document.getElementById('sub97').textContent = `${e97total.toLocaleString()} enrolled · ${states97} states represented`;
+    document.getElementById('sub25').textContent = `${e25total.toLocaleString()} enrolled · ${states25} states represented`;
+  } else {
+    document.getElementById('sub97').textContent = `${a97total.toLocaleString()} admitted · ${DATA.s97.length} states`;
+    document.getElementById('sub25').textContent = `${a25total.toLocaleString()} admitted · ${DATA.s25.length} states`;
+  }
+}
+
+function setMetric(m) {
+  currentMetric = m;
+  document.getElementById('btnEnrolled').classList.toggle('active', m === 'enrolled');
+  document.getElementById('btnAdmitted').classList.toggle('active', m === 'admitted');
+  drawMaps(m);
+  buildTables(m);
+}
+
+// ── TABLES ────────────────────────────────────────────────────────────────
+function buildTable(tblId, states, vals, maxVal) {
+  const pairs = states.map((s,i) => [s, vals[i]]).filter(([,v]) => v > 0);
+  pairs.sort((a,b) => b[1]-a[1]);
+  const top = pairs.slice(0, 15);
+  const tbl = document.getElementById(tblId);
+  tbl.innerHTML = `<thead><tr><th>State</th><th>Count</th><th style="width:120px">Share</th></tr></thead>`;
+  const tbody = document.createElement('tbody');
+  const total = vals.reduce((a,b)=>a+b,0);
+  top.forEach(([s, v]) => {
+    const pct = ((v/total)*100).toFixed(1);
+    const barW = Math.round((v/maxVal)*100);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${s}</td><td>${v.toLocaleString()}</td>
+      <td><div class="bar-cell"><div class="mini-bar" style="width:${barW}px"></div><span>${pct}%</span></div></td>`;
+    tbody.appendChild(tr);
+  });
+  tbl.appendChild(tbody);
+}
+
+function buildTables(metric) {
+  const v97 = metric === 'enrolled' ? DATA.e97 : DATA.a97;
+  const v25 = metric === 'enrolled' ? DATA.e25 : DATA.a25;
+  const mx  = metric === 'enrolled' ? 213 : 611;
+  buildTable('tbl97', DATA.s97, v97, mx);
+  buildTable('tbl25', DATA.s25, v25, Math.max(...v25));
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+drawMaps('enrolled');
+buildTables('enrolled');
+</script>
+</body>
+</html>
