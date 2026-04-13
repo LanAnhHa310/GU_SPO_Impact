@@ -757,34 +757,35 @@ const ERAS = [
 ];
 
 // Metrics for growth bars (enrollment, employees headcount, opex $M in 2024 dollars, capex $M that year)
-// opex estimated from IPEDS anchors (2012: ~$250M nominal → ~$342M in 2024$); capex derived from known construction projects
+// capex = Cash Acquisition of PP&E from GU audited financial statements (Gonzaga Construction 1997-2026.xlsx)
+// opex estimated from IPEDS anchors (2012: ~$250M nominal → ~$342M in 2024$)
 const METRICS = {
-  1999: { enrollment: 4507, employees: 450,  opex: 215, capex: 0    },
-  2000: { enrollment: 4800, employees: 490,  opex: 228, capex: 17.5 },
-  2001: { enrollment: 5300, employees: 540,  opex: 240, capex: 0    },
-  2002: { enrollment: 5600, employees: 590,  opex: 252, capex: 0    },
-  2003: { enrollment: 6000, employees: 650,  opex: 265, capex: 0    },
-  2004: { enrollment: 6200, employees: 710,  opex: 279, capex: 23   },
-  2005: { enrollment: 6500, employees: 770,  opex: 280, capex: 0    },
-  2006: { enrollment: 6800, employees: 840,  opex: 292, capex: 0    },
-  2007: { enrollment: 7100, employees: 930,  opex: 304, capex: 7    },
-  2008: { enrollment: 7319, employees: 1100, opex: 312, capex: 0    },
-  2009: { enrollment: 7500, employees: 1120, opex: 330, capex: 16   },
-  2010: { enrollment: 7600, employees: 1130, opex: 342, capex: 0    },
-  2011: { enrollment: 7700, employees: 1140, opex: 350, capex: 0    },
-  2012: { enrollment: 7800, employees: 1150, opex: 342, capex: 15   },
-  2013: { enrollment: 7800, employees: 1160, opex: 356, capex: 0    },
-  2014: { enrollment: 7800, employees: 1170, opex: 368, capex: 0    },
-  2015: { enrollment: 7800, employees: 1180, opex: 380, capex: 60   },
-  2016: { enrollment: 7800, employees: 1190, opex: 392, capex: 0    },
-  2017: { enrollment: 7800, employees: 1200, opex: 404, capex: 0    },
-  2018: { enrollment: 7800, employees: 1210, opex: 410, capex: 0    },
-  2019: { enrollment: 7800, employees: 1220, opex: 416, capex: 0    },
-  2020: { enrollment: 7600, employees: 1180, opex: 412, capex: 0    },
-  2021: { enrollment: 7500, employees: 1160, opex: 413, capex: 82   },
-  2022: { enrollment: 7470, employees: 1200, opex: 410, capex: 0    },
-  2023: { enrollment: 7470, employees: 1220, opex: 415, capex: 0    },
-  2024: { enrollment: 7470, employees: 1240, opex: 420, capex: 0    },
+  1999: { enrollment: 4507, employees: 450,  opex: 215, capex: 12.4 },
+  2000: { enrollment: 4800, employees: 490,  opex: 228, capex: 12.0 },
+  2001: { enrollment: 5300, employees: 540,  opex: 240, capex: 3.4  },
+  2002: { enrollment: 5600, employees: 590,  opex: 252, capex: 4.0  },
+  2003: { enrollment: 6000, employees: 650,  opex: 265, capex: 23.5 },
+  2004: { enrollment: 6200, employees: 710,  opex: 279, capex: 23.9 },
+  2005: { enrollment: 6500, employees: 770,  opex: 280, capex: 18.5 },
+  2006: { enrollment: 6800, employees: 840,  opex: 292, capex: 11.3 },
+  2007: { enrollment: 7100, employees: 930,  opex: 304, capex: 26.3 },
+  2008: { enrollment: 7319, employees: 1100, opex: 312, capex: 29.1 },
+  2009: { enrollment: 7500, employees: 1120, opex: 330, capex: 30.5 },
+  2010: { enrollment: 7600, employees: 1130, opex: 342, capex: 11.9 },
+  2011: { enrollment: 7700, employees: 1140, opex: 350, capex: 5.9  },
+  2012: { enrollment: 7800, employees: 1150, opex: 342, capex: 5.9  },
+  2013: { enrollment: 7800, employees: 1160, opex: 356, capex: 16.4 },
+  2014: { enrollment: 7800, employees: 1170, opex: 368, capex: 24.7 },
+  2015: { enrollment: 7800, employees: 1180, opex: 380, capex: 47.9 },
+  2016: { enrollment: 7800, employees: 1190, opex: 392, capex: 12.9 },
+  2017: { enrollment: 7800, employees: 1200, opex: 404, capex: 25.6 },
+  2018: { enrollment: 7800, employees: 1210, opex: 410, capex: 57.3 },
+  2019: { enrollment: 7800, employees: 1220, opex: 416, capex: 32.0 },
+  2020: { enrollment: 7600, employees: 1180, opex: 412, capex: 17.1 },
+  2021: { enrollment: 7500, employees: 1160, opex: 413, capex: 24.2 },
+  2022: { enrollment: 7470, employees: 1200, opex: 410, capex: 16.6 },
+  2023: { enrollment: 7470, employees: 1220, opex: 415, capex: 12.2 },
+  2024: { enrollment: 7470, employees: 1240, opex: 420, capex: 25.8 },
 };
 
 const TAG = (label, cls) => `<span class="ev-tag ${cls}">${label}</span>`;
@@ -800,7 +801,7 @@ const EVENTS = {
   },
   2000: {
     gu: [
-      { title: "New School of Law Building", sub: "110,000 sq ft facility — $17.5M investment. Establishes Gonzaga as a full professional school institution and academic anchor for the region.", tags: [TAG("$17.5M","tag-invest"), TAG("Academic","tag-academic")] },
+      { title: "New School of Law Building", sub: "110,000 sq ft facility — $15.7M investment (FY1998–2001). Establishes Gonzaga as a full professional school institution and academic anchor for the region.", tags: [TAG("$15.7M","tag-invest"), TAG("Academic","tag-academic")] },
     ],
     sp: [
       { title: "Pre-Revitalization Era", sub: "Downtown redevelopment has not yet begun. Riverfront Park largely unchanged since 1974 World's Fair. Convention and tourism infrastructure still modest.", tags: [TAG("Context","tag-context")] },
@@ -832,7 +833,7 @@ const EVENTS = {
   },
   2004: {
     gu: [
-      { title: "McCarthey Athletic Center Opens", sub: "$23M arena — 6,000 seats. Transforms Gonzaga into a destination athletics venue. Hosts nationally televised games and conference tournaments.", tags: [TAG("$23M","tag-invest"), TAG("Sports","tag-sport")] },
+      { title: "McCarthey Athletic Center Opens", sub: "$28.3M arena — 6,000 seats. Transforms Gonzaga into a destination athletics venue. Hosts nationally televised games and conference tournaments.", tags: [TAG("$28.3M","tag-invest"), TAG("Sports","tag-sport")] },
     ],
     sp: [
       { title: "Sports Tourism Accelerates", sub: "McCarthey Center draws national TV cameras to Spokane. City begins recognizing athletics as an economic driver. Downtown hospitality benefits.", tags: [TAG("City Impact","tag-city")] },
@@ -858,7 +859,8 @@ const EVENTS = {
   2007: {
     gu: [
       { title: "Kennedy Apartments", sub: "75 units, 220 students — purpose-built student housing expanding campus residential capacity.", tags: [TAG("Housing","tag-invest")] },
-      { title: "Petterson Baseball Complex", sub: "$7M facility. Gonzaga athletics expand beyond basketball, diversifying campus investment.", tags: [TAG("$7M","tag-invest"), TAG("Sports","tag-sport")] },
+      { title: "Patterson Baseball Complex", sub: "$8.9M facility. Gonzaga athletics expand beyond basketball, diversifying campus investment.", tags: [TAG("$8.9M","tag-invest"), TAG("Sports","tag-sport")] },
+      { title: "PACCAR Center for Applied Science", sub: "$7M engineering building — expands applied science and engineering capacity, laying groundwork for the technical workforce pipeline into Spokane employers like Avista and Schweitzer Engineering.", tags: [TAG("$7M","tag-invest"), TAG("Academic","tag-academic")] },
     ],
     sp: [
       { title: "Kendall Yards Planning Begins", sub: "Early discussions for redeveloping the Kendall Yards site — a 78-acre brownfield adjacent to campus. Gonzaga's growth makes nearby development viable.", tags: [TAG("Urban Dev","tag-city")] },
@@ -874,7 +876,8 @@ const EVENTS = {
   },
   2009: {
     gu: [
-      { title: "Coughlin Hall", sub: "$16M residence hall — further expands on-campus housing capacity to meet enrollment demand.", tags: [TAG("$16M","tag-invest"), TAG("Housing","tag-invest")] },
+      { title: "Coughlin Hall", sub: "$16.3M residence hall — further expands on-campus housing capacity to meet enrollment demand.", tags: [TAG("$16.3M","tag-invest"), TAG("Housing","tag-invest")] },
+      { title: "Kennedy Apartments — Phase 2", sub: "$14M expansion of student housing. Combined with Phase 1, Gonzaga now houses 440+ students in purpose-built apartments adjacent to campus.", tags: [TAG("$14M","tag-invest"), TAG("Housing","tag-invest")] },
     ],
     sp: [
       { title: "Downtown Hospitality Expansion", sub: "Riverfront redevelopment planning gains momentum. Early downtown hospitality investment follows growing sports tourism and visiting family traffic.", tags: [TAG("Urban Dev","tag-city")] },
@@ -898,7 +901,7 @@ const EVENTS = {
   },
   2012: {
     gu: [
-      { title: "BARC Retail Center", sub: "$15M mixed-use development — 650 parking spaces + retail. Gonzaga now operating as a real estate and urban development anchor.", tags: [TAG("$15M","tag-invest")] },
+      { title: "BARC Retail Center Under Construction", sub: "Boone Avenue Retail Center — $14.7M mixed-use development with 650 parking spaces + retail. Project completes in 2013.", tags: [TAG("$14.7M","tag-invest")] },
       { title: "By 2012: Major Institution", sub: "Enrollment: 7,800+ | Operating Budget: ~$250M | Endowment: ~$148M | Employees: 1,100+ | Top 5 non-government employer in Spokane County.", tags: [TAG("Milestone","tag-enroll")] },
     ],
     sp: [
@@ -907,7 +910,8 @@ const EVENTS = {
   },
   2013: {
     gu: [
-      { title: "Hemmingson Center Approved", sub: "$60M student union project. The largest single capital project in Gonzaga history at the time. Transforms campus center.", tags: [TAG("$60M","tag-invest")] },
+      { title: "Hemmingson Center Approved", sub: "$64M student union project — the largest single capital project in Gonzaga history at the time. Multi-year construction begins. Transforms the heart of campus.", tags: [TAG("$64M","tag-invest")] },
+      { title: "BARC Retail Center Opens", sub: "$14.7M mixed-use development — 650 parking spaces + retail anchoring the north end of campus. Gonzaga now operating as a real estate and urban development anchor in the neighborhood.", tags: [TAG("$14.7M","tag-invest")] },
     ],
     sp: [
       { title: "Downtown Hospitality Boom", sub: "Hotel capacity in downtown Spokane expands. The Davenport Grand Hotel project announced — directly tied to growing sports and conference demand.", tags: [TAG("Hospitality","tag-city")] },
@@ -915,7 +919,7 @@ const EVENTS = {
   },
   2014: {
     gu: [
-      { title: "Hemmingson Center Under Construction", sub: "Largest construction project on campus — $60M student union reshaping the heart of campus.", tags: [TAG("$60M","tag-invest")] },
+      { title: "Hemmingson Center Under Construction", sub: "Largest construction project on campus — $64M student union reshaping the heart of campus.", tags: [TAG("$64M","tag-invest")] },
     ],
     sp: [
       { title: "$64M Riverfront Park Redevelopment Bond", sub: "Spokane voters approve $64M bond to overhaul Riverfront Park — the city's most significant infrastructure investment in decades. Mirrors Gonzaga's scale of ambition.", tags: [TAG("$64M","tag-infra"), TAG("Milestone","tag-city")] },
@@ -923,7 +927,7 @@ const EVENTS = {
   },
   2015: {
     gu: [
-      { title: "Hemmingson Center Opens", sub: "New campus hub — student dining, event space, student services. Becomes the social and civic center of campus life.", tags: [TAG("$60M","tag-invest"), TAG("Milestone","tag-academic")] },
+      { title: "Hemmingson Center Opens", sub: "New campus hub — student dining, event space, student services. Becomes the social and civic center of campus life.", tags: [TAG("$64M","tag-invest"), TAG("Milestone","tag-academic")] },
     ],
     sp: [
       { title: "Riverfront Redevelopment Begins", sub: "Construction starts on Riverfront Park overhaul. The $64M project runs 2015–2021, transforming Spokane's downtown park and public identity.", tags: [TAG("$64M","tag-infra")] },
@@ -941,6 +945,8 @@ const EVENTS = {
   2017: {
     gu: [
       { title: "Graduate Outcomes: 95% Success", sub: "Average salary rises to $59,710 — a 24% jump from 2016. Gonzaga graduates increasingly entering professional roles in Spokane's key sectors.", tags: [TAG("Outcome 95%","tag-enroll"), TAG("Salary +24%","tag-invest")] },
+      { title: "Volkar Center for Athletic Achievement", sub: "$27.5M state-of-the-art athletics performance facility (FY2017–2018). Supports strength, conditioning, and sports medicine for all GU athletes — reinforcing Gonzaga's national athletics brand.", tags: [TAG("$27.5M","tag-invest"), TAG("Sports","tag-sport")] },
+      { title: "Della Strada Jesuit Community", sub: "$13.6M new Jesuit residence — the first dedicated Jesuit community building on campus in decades. Reinforces Gonzaga's Jesuit identity and mission foundation.", tags: [TAG("$13.6M","tag-invest")] },
     ],
     sp: [
       { title: "Riverfront Park Midway Progress", sub: "New pavilion, ice ribbon, and children's area open in Riverfront Park. Downtown Spokane visitor numbers grow. Sports tourism infrastructure expanding.", tags: [TAG("Infra","tag-infra")] },
@@ -957,6 +963,7 @@ const EVENTS = {
   2019: {
     gu: [
       { title: "Graduate Salary: $63,853 | Success: 95.5%", sub: "Gonzaga graduates consistently among top earners from regional universities. Spokane remains the #1 graduate destination city.", tags: [TAG("Outcome 95.5%","tag-enroll")] },
+      { title: "Myrtle Woldson Performing Arts Center Opens", sub: "$48.7M world-class performing arts venue — 762-seat concert hall, recital hall, and rehearsal spaces. Gonzaga's single largest cultural investment, anchoring the University District arts corridor.", tags: [TAG("$48.7M","tag-invest"), TAG("Culture","tag-partner")] },
     ],
     sp: [
       { title: "Pre-Pandemic Peak", sub: "Spokane's downtown economy at a multi-decade high. Sports events, conventions, and university activity driving hospitality revenue.", tags: [TAG("Economy","tag-city")] },
@@ -972,7 +979,7 @@ const EVENTS = {
   },
   2021: {
     gu: [
-      { title: "Bollier Center for Integrated Science & Engineering", sub: "82,000 sq ft — $82M state-of-the-art facility for engineering, computer science, and applied sciences. Gonzaga's largest academic building.", tags: [TAG("$82M","tag-invest"), TAG("Milestone","tag-academic")] },
+      { title: "Bollier Center for Integrated Science & Engineering", sub: "82,000 sq ft — $48.4M facility for engineering, computer science, and applied sciences. Gonzaga's largest academic building (FY2018–2022). Directly expands the talent pipeline into Spokane's growing tech and engineering employers.", tags: [TAG("$48.4M","tag-invest"), TAG("Milestone","tag-academic")] },
       { title: "Outcomes Rebound: 96.2% Success Rate", sub: "Strongest outcome year on record. Healthcare and technology sectors driving graduate placement. Salary: $63,459.", tags: [TAG("Outcome 96.2%","tag-enroll")] },
     ],
     sp: [
@@ -1000,6 +1007,8 @@ const EVENTS = {
   2024: {
     gu: [
       { title: "Current Enrollment: 7,470", sub: "Gonzaga now operates with a $250M+ operating budget, $148M+ endowment, 1,100+ employees, and a graduate talent pipeline feeding every major Spokane industry.", tags: [TAG("Enrollment","tag-enroll")] },
+      { title: "Morris Family Indoor Training Facility", sub: "$13.4M indoor athletics training complex — expands varsity sports infrastructure, supporting Gonzaga's standing as a national-caliber athletics program and regional sports destination.", tags: [TAG("$13.4M","tag-invest"), TAG("Sports","tag-sport")] },
+      { title: "Mantua Hall — New Student Residence", sub: "$15.2M student housing project (FY2023–2025). Adds residential capacity as Gonzaga manages enrollment and campus living quality for the next generation of students.", tags: [TAG("$15.2M","tag-invest"), TAG("Housing","tag-invest")] },
     ],
     sp: [
       { title: "Spokane Airport TREX Expansion", sub: "New gates and terminal expansion — Spokane International Airport grows to handle increased regional traffic, partly driven by Gonzaga family and alumni travel.", tags: [TAG("Infrastructure","tag-infra")] },
@@ -1109,7 +1118,7 @@ function updateBars(y) {
   const maxEnroll    = 8000;
   const maxEmployees = 1300;
   const maxOpex      = 420;  // $M in 2024 dollars
-  const maxCapex     = 90;   // $M per year
+  const maxCapex     = 65;   // $M per year (peak: FY2018 $57.3M)
 
   const pct = (v, max) => v != null ? Math.round((v / max) * 100) : null;
 
@@ -1128,7 +1137,7 @@ function updateBars(y) {
   set('barEnroll',  'valEnroll',  pct(m.enrollment, maxEnroll),   m.enrollment ? m.enrollment.toLocaleString() : null);
   set('barSalary',  'valSalary',  pct(m.employees, maxEmployees), m.employees  ? m.employees.toLocaleString()  : null);
   set('barSuccess', 'valSuccess', pct(m.opex, maxOpex),           m.opex       ? `$${m.opex}M`                : null);
-  set('barInvest',  'valInvest',  pct(m.capex, maxCapex),         m.capex      ? `$${m.capex}M`               : null);
+  set('barInvest',  'valInvest',  pct(m.capex, maxCapex),         m.capex      ? `$${m.capex.toFixed(1)}M`    : null);
 }
 
 function navigate(dir) {
