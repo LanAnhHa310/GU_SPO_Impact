@@ -206,7 +206,7 @@
 <div class="section-white">
   <div class="inner">
     <h2 class="sec-title">Two Growth Stories, One City</h2>
-    <p class="sec-sub">GU enrollment and Spokane per capita income have tracked each other for 25 years. One institution's rise became a city's renaissance.</p>
+    <p class="sec-sub">GU total enrollment and Spokane per capita income have tracked each other for 25 years. One institution's rise became a city's renaissance.</p>
     <div class="chart-wrap">
       <canvas id="growthChart"></canvas>
     </div>
@@ -357,9 +357,9 @@ const YEARS = [
 ];
 
 const GU_ENROLLMENT = [
-  4507,4800,5300,5600,6000,6200,6500,6800,7100,7319,
-  7500,7600,7700,7800,7800,7800,7800,7800,7800,7800,
-  7800,7600,7500,7470,7470,7470
+  4171,4548,4874,5254,5494,5858,6377,6607,6873,7272,
+  7633,7738,7764,7781,7605,7352,7491,7567,7506,7563,
+  7537,7295,7381,7253,7306,7470,7470
 ];
 
 // Spokane County per capita personal income:FRED series PCPI53063 (exact BEA values)
@@ -400,7 +400,7 @@ new Chart(ctx1, {
     labels: YEARS,
     datasets: [
       {
-        label: 'GU Enrollment',
+        label: 'GU Total Enrollment',
         data: GU_ENROLLMENT,
         borderColor: '#002868',
         backgroundColor: 'rgba(0,40,104,.07)',
@@ -458,7 +458,7 @@ new Chart(ctx1, {
         position: 'left',
         title: {
           display: true,
-          text: 'GU Enrollment',
+          text: 'GU Total Enrollment',
           font: { family: 'Georgia', size: 12 },
           color: '#002868',
         },
