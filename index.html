@@ -1100,6 +1100,7 @@ const ERAS = [
   { label: "Foundation",years: [2000,2001,2002,2003,2004], color: "#7b5ea7" },
   { label: "Buildout",  years: [2005,2006,2007,2008,2009,2010,2011,2012], color: "#c96a00" },
   { label: "Parallel Growth", years: [2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024], color: "#1a7a4a" },
+  { label: "What's Next", years: [2025], color: "#002868" },
 ];
 
 // Metrics for growth bars (enrollment, employees headcount, opex $M in 2024 dollars, capex $M that year)
@@ -1132,6 +1133,7 @@ const METRICS = {
   2022: { enrollment: 7470, employees: 1200, opex: 410, capex: 16.6 },
   2023: { enrollment: 7470, employees: 1220, opex: 415, capex: 12.2 },
   2024: { enrollment: 7470, employees: 1240, opex: 420, capex: 25.8 },
+  2025: { enrollment: 7470, employees: 1240, opex: 420, capex: 0 },
 };
 
 const TAG = (label, cls) => `<span class="ev-tag ${cls}">${label}</span>`;
@@ -1359,6 +1361,18 @@ const EVENTS = {
     sp: [
       { title: "Spokane Airport TREX Expansion", sub: "New gates and terminal expansion — Spokane International Airport grows to handle increased regional traffic, partly driven by Gonzaga family and alumni travel.", tags: [TAG("Infrastructure","tag-infra")] },
       { title: "A Transformed City", sub: "Spokane's downtown in 2024 bears little resemblance to 2000. The Riverfront, Kendall Yards, The Podium, and ONE Stadium represent $200M+ of investment — parallel to Gonzaga's own campus transformation.", tags: [TAG("Milestone","tag-city")] },
+    ],
+  },
+  2025: {
+    gu: [
+      { title: "Institute for Informatics & Applied Technology", sub: "Launched with a $5M gift from GU alumni David & Cathleen Reisenauer. Trains data scientists, AI specialists, and cybersecurity professionals — directly feeding Spokane's health, government, and tech sectors.", tags: [TAG("$5M Gift","tag-invest"), TAG("Technology","tag-invest")] },
+      { title: "School of Health Sciences", sub: "Gonzaga formalizes its healthcare education mission into a unified school — nursing, physiology, and clinical programs — supplying Providence, MultiCare, and CHAS with locally trained professionals.", tags: [TAG("Est. 2023","tag-invest"), TAG("Health","tag-invest")] },
+      { title: "Climate Institute — $21M in EPA Grants", sub: "$19.9M for the Spokane Climate Resilience Project + $1.1M for Smoke Ready Spokane. Partners: City of Spokane, Avista, Spokane Regional Health District. Gonzaga becomes the Inland Northwest's climate research anchor.", tags: [TAG("$21M EPA","tag-invest"), TAG("Research","tag-invest")] },
+      { title: "Woodley Institute for Civil Engagement", sub: "Founded by a $1M gift from Tom Woodley ('69), a Georgetown-trained free speech attorney. Woodley Scholars program, tribal partnerships, and public dialogue series — rooted in Gonzaga's Jesuit civic mission.", tags: [TAG("$1M Gift","tag-invest"), TAG("Civic","tag-invest")] },
+      { title: "Ferro Center for Materials Research", sub: "Opened Feb 2026 inside Bollier Center with a $1M federal grant. Named for Prof. Pat Ferro. Focuses on aerospace materials and clean energy manufacturing — supporting Spokane's emerging advanced manufacturing sector.", tags: [TAG("$1M Federal","tag-invest"), TAG("Research","tag-invest")] },
+    ],
+    sp: [
+      { title: "The Next Chapter", sub: "Basketball put Gonzaga on the map. Health sciences, AI, climate research, and civic engagement will define the next 25 years — and deepen every dimension of the Gonzaga–Spokane relationship.", tags: [TAG("What's Next","tag-city")] },
     ],
   },
 };
