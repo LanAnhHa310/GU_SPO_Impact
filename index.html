@@ -633,7 +633,7 @@
       <div class="metric-value" id="valSalary">—</div>
     </div>
     <div class="metric-row">
-      <div class="metric-label">Construction (year)</div>
+      <div class="metric-label">Construction (2026 $)</div>
       <div class="bar-wrap"><div class="bar-fill" id="barCon" style="background:var(--era2);width:0%"></div></div>
       <div class="metric-value" id="valCon">—</div>
     </div>
@@ -1116,37 +1116,35 @@ const ERAS = [
   { label: "What's Next", years: [2025], color: "#002868" },
 ];
 
-// Metrics for growth bars (enrollment, employees headcount, opex $M in 2024 dollars, capex $M that year)
-// capex = Cash Acquisition of PP&E from GU audited financial statements (Gonzaga Construction 1997-2026.xlsx)
-// opex estimated from IPEDS anchors (2012: ~$250M nominal → ~$342M in 2024$)
+// Metrics for growth bars (enrollment, employees headcount, construction $M adjusted to 2026 dollars that year)
 const METRICS = {
-  1999: { enrollment: 4507, employees: 450,  opex: 215, capex: 12.4 },
-  2000: { enrollment: 4800, employees: 490,  opex: 228, capex: 12.0 },
-  2001: { enrollment: 5300, employees: 540,  opex: 240, capex: 3.4  },
-  2002: { enrollment: 5600, employees: 590,  opex: 252, capex: 4.0  },
-  2003: { enrollment: 6000, employees: 650,  opex: 265, capex: 23.5 },
-  2004: { enrollment: 6200, employees: 710,  opex: 279, capex: 23.9 },
-  2005: { enrollment: 6500, employees: 770,  opex: 280, capex: 18.5 },
-  2006: { enrollment: 6800, employees: 840,  opex: 292, capex: 11.3 },
-  2007: { enrollment: 7100, employees: 930,  opex: 304, capex: 26.3 },
-  2008: { enrollment: 7319, employees: 1100, opex: 312, capex: 29.1 },
-  2009: { enrollment: 7500, employees: 1120, opex: 330, capex: 30.5 },
-  2010: { enrollment: 7600, employees: 1130, opex: 342, capex: 11.9 },
-  2011: { enrollment: 7700, employees: 1140, opex: 350, capex: 5.9  },
-  2012: { enrollment: 7800, employees: 1150, opex: 342, capex: 5.9  },
-  2013: { enrollment: 7800, employees: 1160, opex: 356, capex: 16.4 },
-  2014: { enrollment: 7800, employees: 1170, opex: 368, capex: 24.7 },
-  2015: { enrollment: 7800, employees: 1180, opex: 380, capex: 47.9 },
-  2016: { enrollment: 7800, employees: 1190, opex: 392, capex: 12.9 },
-  2017: { enrollment: 7800, employees: 1200, opex: 404, capex: 25.6 },
-  2018: { enrollment: 7800, employees: 1210, opex: 410, capex: 57.3 },
-  2019: { enrollment: 7800, employees: 1220, opex: 416, capex: 32.0 },
-  2020: { enrollment: 7600, employees: 1180, opex: 412, capex: 17.1 },
-  2021: { enrollment: 7500, employees: 1160, opex: 413, capex: 24.2 },
-  2022: { enrollment: 7470, employees: 1200, opex: 410, capex: 16.6 },
-  2023: { enrollment: 7470, employees: 1220, opex: 415, capex: 12.2 },
-  2024: { enrollment: 7470, employees: 1240, opex: 420, capex: 25.8 },
-  2025: { enrollment: 7470, employees: 1240, opex: 420, capex: 0 },
+  1999: { enrollment: 4507, employees: 450, construction: 26.1 },
+  2000: { enrollment: 4800, employees: 490, construction: 22.9 },
+  2001: { enrollment: 5300, employees: 540, construction: 7.2 },
+  2002: { enrollment: 5600, employees: 590, construction: 19.4 },
+  2003: { enrollment: 6000, employees: 650, construction: 58.1 },
+  2004: { enrollment: 6200, employees: 710, construction: 48.3 },
+  2005: { enrollment: 6500, employees: 770, construction: 32.0 },
+  2006: { enrollment: 6800, employees: 840, construction: 18.9 },
+  2007: { enrollment: 7100, employees: 930, construction: 41.8 },
+  2008: { enrollment: 7319, employees: 1100, construction: 45.8 },
+  2009: { enrollment: 7500, employees: 1120, construction: 46.8 },
+  2010: { enrollment: 7600, employees: 1130, construction: 18.5 },
+  2011: { enrollment: 7700, employees: 1140, construction: 8.8 },
+  2012: { enrollment: 7800, employees: 1150, construction: 7.9 },
+  2013: { enrollment: 7800, employees: 1160, construction: 27.6 },
+  2014: { enrollment: 7800, employees: 1170, construction: 42.2 },
+  2015: { enrollment: 7800, employees: 1180, construction: 70.7 },
+  2016: { enrollment: 7800, employees: 1190, construction: 22.2 },
+  2017: { enrollment: 7800, employees: 1200, construction: 45.2 },
+  2018: { enrollment: 7800, employees: 1210, construction: 87.9 },
+  2019: { enrollment: 7800, employees: 1220, construction: 45.9 },
+  2020: { enrollment: 7600, employees: 1180, construction: 25.4 },
+  2021: { enrollment: 7500, employees: 1160, construction: 35.6 },
+  2022: { enrollment: 7470, employees: 1200, construction: 21.2 },
+  2023: { enrollment: 7470, employees: 1220, construction: 12.6 },
+  2024: { enrollment: 7470, employees: 1240, construction: 28.9 },
+  2025: { enrollment: 7470, employees: 1240, construction: 15.6 }
 };
 
 const TAG = (label, cls) => `<span class="ev-tag ${cls}">${label}</span>`;
@@ -1499,8 +1497,7 @@ function updateBars(y) {
   const m = METRICS[y] || {};
   const maxEnroll    = 8000;
   const maxEmployees = 1300;
-  const maxOpex      = 420;  // $M in 2024 dollars
-  const maxCapex     = 65;   // $M per year (peak: FY2018 $57.3M)
+  const maxCon = 89.7;
 
   const pct = (v, max) => v != null ? Math.round((v / max) * 100) : null;
 
@@ -1517,9 +1514,8 @@ function updateBars(y) {
   };
 
   set('barEnroll',  'valEnroll',  pct(m.enrollment, maxEnroll),   m.enrollment ? m.enrollment.toLocaleString() : null);
-  set('barSalary',  'valSalary',  pct(m.employees, maxEmployees), m.employees  ? m.employees.toLocaleString()  : null);
-  set('barSuccess', 'valSuccess', pct(m.opex, maxOpex),           m.opex       ? `$${m.opex}M`                : null);
-  set('barInvest',  'valInvest',  pct(m.capex, maxCapex),         m.capex      ? `$${m.capex.toFixed(1)}M`    : null);
+  set('barSalary',  'valSalary',  pct(m.employees, maxEmployees), m.employees  ? m.employees.toLocaleString()  : null);           
+  set('barCon',  'valCon',  pct(m.construction, maxCon),         m.construction      ? `$${m.construction.toFixed(1)}M`    : null);
 }
 
 function navigate(dir) {
