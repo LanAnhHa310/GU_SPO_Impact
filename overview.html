@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gonzaga & Spokane:Parallel Growth Overview</title>
+  <title>Gonzaga & Spokane: Parallel Growth Overview</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -206,12 +206,12 @@
 <div class="section-white">
   <div class="inner">
     <h2 class="sec-title">Two Growth Stories, One City</h2>
-    <p class="sec-sub">GU total enrollment and Spokane per capita income have tracked each other for 25 years. One institution's rise became a city's renaissance.</p>
+    <p class="sec-sub">GU total undergraduate enrollment and Spokane per capita income have tracked each other for 25 years. One institution's rise became a city's renaissance.</p>
     <div class="chart-wrap">
       <canvas id="growthChart"></canvas>
     </div>
     <p class="chart-note">
-      Sources: IPEDS (GU total enrollment). Spokane County per capita personal income: FRED series PCPI53063 (BEA Regional Data).
+      Sources: IPEDS (GU undergraduate enrollment). Spokane County per capita personal income: FRED series PCPI53063 (BEA Regional Data).
       Note: 2020–21 income spike reflects COVID-era federal transfer payments, not sustained regional wage growth.
     </p>
   </div>
@@ -220,7 +220,7 @@
 <!-- SECTION 2: BEFORE & AFTER -->
 <div class="section">
   <h2 class="sec-title">Before &amp; After</h2>
-  <p class="sec-sub">What Gonzaga and Spokane looked like in 2000:and what changed by 2024.</p>
+  <p class="sec-sub">What Gonzaga and Spokane looked like in 2000: and what changed by 2024.</p>
   <div class="ba-grid">
 
     <div class="ba-col before">
@@ -348,9 +348,32 @@ const YEARS = [
 ];
 
 const GU_ENROLLMENT = [
-  4171,4548,4874,5254,5494,5858,6377,6607,6873,7272,
-  7633,7738,7764,7781,7605,7352,7491,7567,7506,7563,
-  7537,7295,7381,7253,7306,7470,7470
+  2747, // 1999
+  3019, // 2000
+  3359, // 2001
+  3693, // 2002
+  3807, // 2003
+  3994, // 2004
+  4151, // 2005
+  4275, // 2006
+  4385, // 2007
+  4517, // 2008
+  4729, // 2009
+  4805, // 2010
+  4865, // 2011
+  4906, // 2012
+  4896, // 2013
+  4837, // 2014
+  5062, // 2015
+  5183, // 2016
+  5192, // 2017
+  5304, // 2018
+  5211, // 2019
+  4852, // 2020
+  4986, // 2021
+  5084, // 2022
+  5163, // 2023
+  5281  // 2024
 ];
 
 // Spokane County per capita personal income:FRED series PCPI53063 (exact BEA values)
@@ -391,7 +414,7 @@ new Chart(ctx1, {
     labels: YEARS,
     datasets: [
       {
-        label: 'GU Total Enrollment',
+        label: 'GU Total Undergraduate Enrollment',
         data: GU_ENROLLMENT,
         borderColor: '#002868',
         backgroundColor: 'rgba(0,40,104,.07)',
@@ -449,11 +472,11 @@ new Chart(ctx1, {
         position: 'left',
         title: {
           display: true,
-          text: 'GU Total Enrollment',
+          text: 'GU Undergraduate Enrollment',
           font: { family: 'Georgia', size: 12 },
           color: '#002868',
         },
-        min: 4000, max: 8500,
+        min: 2500, max: 6000,
         grid: { color: 'rgba(0,40,104,.06)' },
         ticks: {
           font: { family: 'Georgia', size: 11 },
@@ -468,7 +491,7 @@ new Chart(ctx1, {
           font: { family: 'Georgia', size: 12 },
           color: '#0d6b6e',
         },
-        min: 20000, max: 75000,
+        min: 20000, max: 70000,
         grid: { drawOnChartArea: false },
         ticks: {
           font: { family: 'Georgia', size: 11 },
@@ -481,20 +504,20 @@ new Chart(ctx1, {
 
 // ── CHART 2: PRIVATE NW PEER COMPARISON (IPEDS verified) ────
 const PEERS = [
-  { name: 'Gonzaga',           e97: 4057,  e24: 7470  },
-  { name: 'George Fox',        e97: 2160,  e24: 4916  },
-  { name: 'Pacific University',e97: 1854,  e24: 3427  },
-  { name: 'Seattle University',e97: 5739,  e24: 7189  },
-  { name: 'U of Portland',     e97: 2731,  e24: 3285  },
-  { name: 'Whitworth',         e97: 2043,  e24: 2314  },
-  { name: 'Willamette',        e97: 2502,  e24: 2180  },
-  { name: "Saint Martin's",    e97: 1653,  e24: 1390  },
-  { name: 'Pacific Lutheran',  e97: 3555,  e24: 2797  },
-  { name: 'Seattle Pacific',   e97: 3321,  e24: 2261  },
-  { name: 'Linfield',          e97: 2710,  e24: 1709  },
-  { name: 'U of Puget Sound',  e97: 3011,  e24: 1864  },
+  { name: 'Gonzaga',            e99: 2747, e24: 5281 },
+  { name: 'George Fox',         e99: 1670, e24: 3354 },
+  { name: 'Pacific University', e99: 1072, e24: 1589 },
+  { name: 'Seattle University', e99: 3245, e24: 4078 },
+  { name: 'U of Portland',      e99: 2392, e24: 2986 },
+  { name: 'Whitworth',          e99: 1780, e24: 1867 },
+  { name: 'Willamette',         e99: 1725, e24: 1661 },
+  { name: "Saint Martin's",     e99: 1215, e24: 1189 },
+  { name: 'Pacific Lutheran',   e99: 3302, e24: 2446 },
+  { name: 'Seattle Pacific',    e99: 2636, e24: 1776 },
+  { name: 'Linfield',           e99: 1550, e24: 1652 },
+  { name: 'U of Puget Sound',   e99: 2695, e24: 1594 },
 ];
-PEERS.sort((a, b) => ((b.e24 - b.e97) / b.e97) - ((a.e24 - a.e97) / a.e97));
+PEERS.sort((a, b) => ((b.e24 - b.e99) / b.e99) - ((a.e24 - a.e99) / a.e99));
 
 const ctx2 = document.getElementById('peerChart').getContext('2d');
 new Chart(ctx2, {
@@ -502,8 +525,8 @@ new Chart(ctx2, {
   data: {
     labels: PEERS.map(p => p.name),
     datasets: [{
-      label: 'Enrollment Growth % (1997–2024)',
-      data: PEERS.map(p => Math.round(((p.e24 - p.e97) / p.e97) * 100)),
+      label: 'Undergraduate Enrollment Growth % (1999–2024)',
+      data: PEERS.map(p => Math.round(((p.e24 - p.e99) / p.e99) * 100)),
       backgroundColor: PEERS.map(p => p.name === 'Gonzaga' ? '#002868' : '#0d6b6e'),
       borderColor:     PEERS.map(p => p.name === 'Gonzaga' ? '#002868' : '#0a4f52'),
       borderWidth: 1.5,
@@ -528,7 +551,7 @@ new Chart(ctx2, {
             const sign = ctx.raw >= 0 ? '+' : '';
             return [
               `  ${sign}${ctx.raw}% growth`,
-              `  ${p.e97.toLocaleString()} → ${p.e24.toLocaleString()} students`,
+              `  ${p.e99.toLocaleString()} → ${p.e24.toLocaleString()} students`,
             ];
           },
         },
@@ -536,7 +559,7 @@ new Chart(ctx2, {
     },
     scales: {
       x: {
-        title: { display: true, text: 'Enrollment Growth (%) 1997–2024', font: { family: 'Georgia', size: 12 } },
+        title: { display: true, text: 'Undergraduate Enrollment Growth (%) 1999–2024', font: { family: 'Georgia', size: 12 } },
         ticks: { font: { family: 'Georgia', size: 11 }, callback: v => (v >= 0 ? '+' : '') + v + '%' },
         grid: { color: 'rgba(0,0,0,.05)' },
       },
