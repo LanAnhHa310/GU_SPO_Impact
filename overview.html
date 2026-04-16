@@ -350,6 +350,18 @@
   <p class="chart-note">Source: IPEDS Fall Enrollment data. Figures represent total headcount (undergraduate + graduate/first professional). All 12 institutions verified against IPEDS. Peer set: George Fox, Linfield, Pacific Lutheran, Pacific, Saint Martin's, Seattle Pacific, Seattle, U of Portland, U of Puget Sound, Whitworth, Willamette.</p>
 </div>
 
+<!-- SECTION 3b: CATHOLIC PEER ENROLLMENT COMPARISON -->
+<div class="section-white">
+  <div class="inner">
+    <h2 class="sec-title">Enrollment Change Among Peer Catholic Universities (1999–2024)</h2>
+    <p class="sec-sub">Undergraduate enrollment % change for 27 Catholic universities of comparable size and mission. Gonzaga ranks near the top — while more than half of its peers saw enrollment decline over the same 25-year period.</p>
+    <div style="position:relative; height:420px;">
+      <canvas id="catholicChart"></canvas>
+    </div>
+    <p class="chart-note">Source: IPEDS Fall Enrollment data. Figures represent undergraduate headcount. Peer set selected based on Carnegie classification and enrollment similarity to Gonzaga in 1999.</p>
+  </div>
+</div>
+
 <!-- STORY CALLOUT -->
 <div class="story-callout">
   <div class="inner">
@@ -626,6 +638,81 @@ new Chart(ctx2, {
       y: {
         grid: { display: false },
         ticks: { font: { family: 'Georgia', size: 12 } },
+      },
+    },
+  },
+});
+
+// ── CHART 3: CATHOLIC PEER ENROLLMENT COMPARISON ────────────────────────────
+const CATHOLIC_PEERS = [
+  { name: 'Gonzaga University',                 e99: 2747, e24: 5281 },
+  { name: 'Loyola Marymount University',        e99: 4590, e24: 7273 },
+  { name: 'Santa Clara University',             e99: 4477, e24: 6577 },
+  { name: 'Fairfield University',               e99: 4064, e24: 5391 },
+  { name: "Saint Joseph's University",          e99: 4407, e24: 5044 },
+  { name: 'Creighton University',               e99: 3976, e24: 4377 },
+  { name: 'Marquette University',               e99: 7437, e24: 8045 },
+  { name: 'Xavier University',                  e99: 3958, e24: 4239 },
+  { name: 'University of Detroit Mercy',        e99: 3932, e24: 3422 },
+  { name: "Saint Mary's College of California", e99: 2858, e24: 1954 },
+];
+// sorted descending by % change (1999→2024)
+
+const ctx3 = document.getElementById('catholicChart').getContext('2d');
+new Chart(ctx3, {
+  type: 'bar',
+  data: {
+    labels: CATHOLIC_PEERS.map(p => p.name),
+    datasets: [{
+      label: 'Undergraduate Enrollment Growth % (1999–2024)',
+      data: CATHOLIC_PEERS.map(p => Math.round(((p.e24 - p.e99) / p.e99) * 100)),
+      backgroundColor: CATHOLIC_PEERS.map(p => {
+        if (p.name === 'Gonzaga University') return '#002868';
+        const pct = ((p.e24 - p.e99) / p.e99) * 100;
+        return pct >= 0 ? '#0d6b6e' : '#b03030';
+      }),
+      borderColor: CATHOLIC_PEERS.map(p => {
+        if (p.name === 'Gonzaga University') return '#001a4d';
+        const pct = ((p.e24 - p.e99) / p.e99) * 100;
+        return pct >= 0 ? '#0a4f52' : '#8a2020';
+      }),
+      borderWidth: 1.5,
+      borderRadius: 4,
+      borderSkipped: false,
+    }],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: 'y',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: 'rgba(20,20,40,.92)',
+        titleFont: { family: 'Georgia', size: 13 },
+        bodyFont: { family: 'Georgia', size: 12 },
+        padding: 12,
+        callbacks: {
+          label: (ctx) => {
+            const p = CATHOLIC_PEERS[ctx.dataIndex];
+            const sign = ctx.raw >= 0 ? '+' : '';
+            return [
+              `  ${sign}${ctx.raw}% growth`,
+              `  ${p.e99.toLocaleString()} → ${p.e24.toLocaleString()} students`,
+            ];
+          },
+        },
+      },
+    },
+    scales: {
+      x: {
+        title: { display: true, text: 'Undergraduate Enrollment Growth (%) 1999–2024', font: { family: 'Georgia', size: 12 } },
+        ticks: { font: { family: 'Georgia', size: 11 }, callback: v => (v >= 0 ? '+' : '') + v + '%' },
+        grid: { color: 'rgba(0,0,0,.05)' },
+      },
+      y: {
+        grid: { display: false },
+        ticks: { font: { family: 'Georgia', size: 11 } },
       },
     },
   },
