@@ -342,8 +342,8 @@
 
 <!-- SECTION 3: PRIVATE NW PEERS COMPARISON -->
 <div class="section">
-  <h2 class="sec-title">Growth Among Private Pacific Northwest Universities</h2>
-  <p class="sec-sub">Total enrollment change from 1997 to 2024 across 12 private colleges and universities in the Pacific Northwest. Gonzaga ranks among the top three fastest-growing institutions in the region:while the majority of its peers have seen enrollment decline over the same period.</p>
+  <h2 class="sec-title">Enrollment Growth Among Private Pacific Northwest Universities</h2>
+  <p class="sec-sub">Total enrollment change from 1999 to 2024 across 12 private colleges and universities in the Pacific Northwest. Gonzaga ranks among the top three fastest-growing institutions in the region:while the majority of its peers have seen enrollment decline over the same period.</p>
   <div style="position:relative; height:440px;">
     <canvas id="peerChart"></canvas>
   </div>
@@ -383,7 +383,7 @@
 <!-- SECTION 4: CATHOLIC SCHOOLS COMPARISON -->
 <div class="section-white">
   <div class="inner">
-    <h2 class="sec-title">Gonzaga vs. Peer Catholic Universities</h2>
+    <h2 class="sec-title">Employment Growth Among Gonzaga & Peer Catholic Universities</h2>
     <p class="sec-sub-lg">
       Gonzaga stands out among peer Catholic universities for strong student outcomes, including a high employment rate after graduation.
     </p>
@@ -618,8 +618,14 @@ new Chart(ctx2, {
     datasets: [{
       label: 'Undergraduate Enrollment Growth % (1999–2024)',
       data: PEERS.map(p => Math.round(((p.e24 - p.e99) / p.e99) * 100)),
-      backgroundColor: PEERS.map(p => p.name === 'Gonzaga' ? '#002868' : '#0d6b6e'),
-      borderColor:     PEERS.map(p => p.name === 'Gonzaga' ? '#002868' : '#0a4f52'),
+      backgroundColor: PEERS.map(p => {
+        if (p.name === 'Gonzaga') return '#002868';
+        return ((p.e24 - p.e99) / p.e99) < 0 ? '#c0392b' : '#0d6b6e';
+      }),
+      borderColor: PEERS.map(p => {
+        if (p.name === 'Gonzaga') return '#002868';
+        return ((p.e24 - p.e99) / p.e99) < 0 ? '#922b21' : '#0a4f52';
+      }),
       borderWidth: 1.5,
       borderRadius: 4,
       borderSkipped: false,
