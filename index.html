@@ -409,6 +409,18 @@
       border: 1px dashed #ccc;
     }
     .ev-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+
+    /* compact grid for years with many events */
+    .ev-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+    }
+    .ev-grid .event-card { margin-bottom: 0; }
+    .ev-grid .ev-photo { height: 100px; }
+    .ev-grid .ev-title { font-size: .82rem; }
+    .ev-grid .ev-sub { font-size: .75rem; }
+    .ev-grid .ev-invest { font-size: 1.2rem; }
     .ev-photo-label {
       font-size: .75rem;
       color: #999;
@@ -1448,7 +1460,8 @@ function renderEvents(containerId, events, side) {
     el.innerHTML = `<div class="empty-state">No recorded events for ${activeYear}</div>`;
     return;
   }
-  el.innerHTML = events.map(ev => `
+  const compact = events.length >= 4;
+  const cards = events.map(ev => `
     <div class="event-card">
       <div class="ev-photo">
         ${ev.photo
@@ -1461,6 +1474,7 @@ function renderEvents(containerId, events, side) {
       <div>${(ev.tags || []).join(' ')}</div>
     </div>
   `).join('');
+  el.innerHTML = compact ? `<div class="ev-grid">${cards}</div>` : cards;
 }
 
 function updateBars(y) {
