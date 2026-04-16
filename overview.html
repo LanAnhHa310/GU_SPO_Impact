@@ -104,6 +104,50 @@
       max-width: 720px;
     }
     .chart-note { font-size: .75rem; color: var(--muted); font-style: italic; margin-top: .6rem; }
+
+    /* ── STORY CALLOUT ── */
+    .story-callout {
+      background: linear-gradient(135deg, var(--gu-navy) 0%, #1a3d7a 100%);
+      color: white;
+      padding: 4rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .story-callout::before {
+      content: '\201C';
+      position: absolute;
+      top: -1rem;
+      left: 1.5rem;
+      font-size: 12rem;
+      color: rgba(240,192,64,.12);
+      font-family: Georgia, serif;
+      line-height: 1;
+      pointer-events: none;
+    }
+    .story-callout .inner {
+      max-width: 860px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .story-callout .callout-label {
+      font-size: .72rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.25rem;
+      font-weight: 700;
+    }
+    .story-callout p {
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+      line-height: 1.85;
+      color: rgba(255,255,255,.92);
+    }
+    .story-callout p mark {
+      background: none;
+      color: var(--gold);
+      font-style: italic;
+      font-weight: 700;
+    }
     p.sec-sub-lg {
       font-size: 1rem;
       line-height: 1.85;
@@ -304,6 +348,24 @@
     <canvas id="peerChart"></canvas>
   </div>
   <p class="chart-note">Source: IPEDS Fall Enrollment data. Figures represent total headcount (undergraduate + graduate/first professional). All 12 institutions verified against IPEDS. Peer set: George Fox, Linfield, Pacific Lutheran, Pacific, Saint Martin's, Seattle Pacific, Seattle, U of Portland, U of Puget Sound, Whitworth, Willamette.</p>
+</div>
+
+<!-- STORY CALLOUT -->
+<div class="story-callout">
+  <div class="inner">
+    <div class="callout-label">The Bigger Picture</div>
+    <p>
+      Situated in the middle of peer Catholic universities in terms of undergraduate enrollment,
+      <mark>Gonzaga was an ordinary institution at the turn of the century.</mark>
+      The unparalleled growth over the first decade of the 21st century has
+      <mark>catapulted Gonzaga to one of the top 25 largest Catholic universities in the United States.</mark>
+      Simultaneously, Spokane has seen significant growth in employment and average income.
+      While the two are not causal, <mark>strong universities enable stable employment and spending.</mark>
+      Gonzaga itself is the largest tourist destination in Spokane due to its large student body,
+      national prestige, and basketball appeal —
+      <mark>all factors draw significant benefit to broader Spokane and the businesses that reside within it.</mark>
+    </p>
+  </div>
 </div>
 
 <!-- SECTION 4: CATHOLIC SCHOOLS COMPARISON -->
