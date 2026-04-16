@@ -110,6 +110,7 @@
       padding: .2rem .7rem;
       border-radius: 4px 4px 0 0;
       white-space: nowrap;
+      overflow: hidden;
     }
 
     /* main timeline track */
@@ -1231,11 +1232,11 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 <script>
 // ── DATA ──────────────────────────────────────────────────────────────────────
 const ERAS = [
-  { label: "Pre-Story", years: [1999],               color: "#666"         },
+  { label: "Pre", years: [1999],               color: "#666"         },
   { label: "Foundation",years: [2000,2001,2002,2003,2004], color: "#7b5ea7" },
   { label: "Buildout",  years: [2005,2006,2007,2008,2009,2010,2011,2012], color: "#c96a00" },
   { label: "Parallel Growth", years: [2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024], color: "#1a7a4a" },
-  { label: "What's Next", years: [2025], color: "#002868" },
+  { label: "Next", years: [2025], color: "#002868" },
 ];
 
 // Metrics for growth bars (total enrollment (grad + undergrad), employees headcount, construction $M adjusted to 2026 dollars that year)
