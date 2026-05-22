@@ -236,7 +236,7 @@
 <!-- HERO -->
 <header>
   <h1>Gonzaga &amp; <span>Spokane</span></h1>
-  <p class="sub">A quarter century of parallel growth:beyond basketball</p>
+  <p class="sub">A quarter century of parallel growth beyond basketball</p>
   <div class="stat-pills">
     <div class="pill">GU enrollment <strong>+84%</strong> since 1997</div>
     <div class="pill">Spokane per capita income <strong>+132%</strong> since 2000</div>
@@ -342,8 +342,8 @@
 
 <!-- SECTION 3: PRIVATE NW PEERS COMPARISON -->
 <div class="section">
-  <h2 class="sec-title">Growth Among Private Pacific Northwest Universities</h2>
-  <p class="sec-sub">Total enrollment change from 1997 to 2024 across 12 private colleges and universities in the Pacific Northwest. Gonzaga ranks among the top three fastest-growing institutions in the region:while the majority of its peers have seen enrollment decline over the same period.</p>
+  <h2 class="sec-title">Enrollment Growth Among Private Pacific Northwest Universities</h2>
+  <p class="sec-sub">Total enrollment change from 1999 to 2024 across 12 private colleges and universities in the Pacific Northwest. Gonzaga ranks among the top three fastest-growing institutions in the region:while the majority of its peers have seen enrollment decline over the same period.</p>
   <div style="position:relative; height:440px;">
     <canvas id="peerChart"></canvas>
   </div>
@@ -383,15 +383,34 @@
 <!-- SECTION 4: CATHOLIC SCHOOLS COMPARISON -->
 <div class="section-white">
   <div class="inner">
-    <h2 class="sec-title">Gonzaga vs. Peer Catholic Universities</h2>
-    <p class="sec-sub-lg">Enrollment growth compared to Catholic institutions of similar size and mission. Gonzaga's trajectory stands apart.</p>
+    <h2 class="sec-title">Enrollment Growth Among Gonzaga & Peer Catholic Universities</h2>
+    <p class="sec-sub-lg">
+      Gonzaga stands out among peer Catholic universities for strong student outcomes, including a high enrollment rate after graduation.
+    </p>
+
+    <!-- Chart 1: Employment -->
     <div class="flourish-embed flourish-chart" data-src="visualisation/28385025">
       <script src="https://public.flourish.studio/resources/embed.js"></script>
-      <noscript><img src="https://public.flourish.studio/visualisation/28385025/thumbnail" width="100%" alt="chart visualization" /></noscript>
+      <noscript>
+        <img src="https://public.flourish.studio/visualisation/28385025/thumbnail" width="100%" alt="employment chart" />
+      </noscript>
     </div>
-    <h3 style="font-size:1.05rem;color:var(--gu-navy);margin:2rem 0 .4rem;font-family:Georgia,serif;">Enrollment by Index</h3>
-    <p class="sec-sub">Indexed enrollment growth (base year = 100) across peer Catholic universities, showing relative change over time.</p>
-    <div class="flourish-embed flourish-chart" data-src="visualisation/28385018"><script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img src="https://public.flourish.studio/visualisation/28385018/thumbnail" width="100%" alt="visualization" /></noscript></div>
+
+    <!-- Chart 2: Indexed Enrollment -->
+    <h3 style="font-size:1.05rem;color:var(--gu-navy);margin:2rem 0 .4rem;font-family:Georgia,serif;">
+      Employment Growth (Indexed)
+    </h3>
+    <p class="sec-sub">
+      Indexed undergraduate employment (base year = 100) across peer Catholic universities, showing relative growth over time. Gonzaga’s trajectory reflects sustained student success compared to peers.
+    </p>
+
+    <div class="flourish-embed flourish-chart" data-src="visualisation/28385018">
+      <script src="https://public.flourish.studio/resources/embed.js"></script>
+      <noscript>
+        <img src="https://public.flourish.studio/visualisation/28385018/thumbnail" width="100%" alt="indexed enrollment visualization" />
+      </noscript>
+    </div>
+  </div>
 </div>
 
 <!-- SECTION 5: STUDENT ORIGINS -->
@@ -599,8 +618,14 @@ new Chart(ctx2, {
     datasets: [{
       label: 'Undergraduate Enrollment Growth % (1999–2024)',
       data: PEERS.map(p => Math.round(((p.e24 - p.e99) / p.e99) * 100)),
-      backgroundColor: PEERS.map(p => p.name === 'Gonzaga' ? '#002868' : '#0d6b6e'),
-      borderColor:     PEERS.map(p => p.name === 'Gonzaga' ? '#002868' : '#0a4f52'),
+      backgroundColor: PEERS.map(p => {
+        if (p.name === 'Gonzaga') return '#002868';
+        return ((p.e24 - p.e99) / p.e99) < 0 ? '#c0392b' : '#0d6b6e';
+      }),
+      borderColor: PEERS.map(p => {
+        if (p.name === 'Gonzaga') return '#002868';
+        return ((p.e24 - p.e99) / p.e99) < 0 ? '#922b21' : '#0a4f52';
+      }),
       borderWidth: 1.5,
       borderRadius: 4,
       borderSkipped: false,
